@@ -1,0 +1,186 @@
+package github.therealbuggy.configurator;
+
+import github.therealbuggy.configurator.exceptions.NotInsideSection;
+import github.therealbuggy.configurator.holder.UnknownValueHolder;
+import github.therealbuggy.configurator.holder.ValueHolder;
+import github.therealbuggy.configurator.key.Key;
+import github.therealbuggy.configurator.key.KeyImpl;
+import github.therealbuggy.configurator.nav.In;
+import github.therealbuggy.configurator.sections.Section;
+import github.therealbuggy.configurator.translator.Translator;
+import github.therealbuggy.configurator.types.Type;
+
+import java.util.*;
+
+/**
+ * Created by jonathan on 01/01/16.
+ */
+public abstract class OldMapConfigurator implements IConfigurator<String>{
+    private final Map<String, Key<?>> sectionsAndKeys = new HashMap<>();
+    private final boolean insideSection;
+    private final BackEndIConfigurator backEndIConfigurator;
+
+    OldMapConfigurator(boolean insideSection, BackEndIConfigurator backEndIConfigurator) {
+        this.insideSection = insideSection;
+        this.backEndIConfigurator = backEndIConfigurator;
+    }
+
+    @Override
+    public Key<?> tagSection(String tagName, java.lang.String section) {
+        return this.tagSection(tagName, section, null, In.MAIN);
+    }
+
+    @Override
+    public <T> Key<T> tagSection(String tagName, java.lang.String section, Type<T> type) {
+        return this.tagSection(tagName, section, type, In.MAIN);
+    }
+
+    @Override
+    public <T> Key<T> tagSection(String tagName, java.lang.String section, Type<T> type, In<String> superSection) {
+
+        Section supSection = null;
+        if(superSection != null){
+            Key<?> key = null;
+            if(!insideSection && !superSection.isMain()){
+                key = sectionsAndKeys.get(superSection.getPath()[0]);
+            }else if(insideSection && !superSection.isMain()){
+                key = getSection(superSection);
+            }
+            if(key != null){
+                if(key instanceof Section) {
+                    supSection = (Section) key;
+                }
+            }
+        }
+
+        if(type != null){
+            java.lang.String path = (supSection != null ? supSection.getPath() + "." + section : section);
+
+            Key<T> key = new KeyImpl<>(path, supSection, type, this.backEndIConfigurator);
+            if(supSection != null && insideSection){
+                supSection.setKey(tagName, key);
+            }else{
+                sectionsAndKeys.put(tagName, key);
+            }
+            return key;
+        } else {
+            Section sectionInstance = new Section(section, supSection, this.backEndIConfigurator);
+
+            if(supSection != null && insideSection){
+                supSection.setKey(tagName, sectionInstance);
+            }else{
+                sectionsAndKeys.put(tagName, sectionInstance);
+            }
+
+            return sectionInstance;
+        }
+
+    }
+
+    @Override
+    public Key<?> tagSection(String tagName, java.lang.String section, In<String> superSection) {
+        return this.tagSection(tagName, section, null, superSection);
+    }
+
+    @Override
+    public <T> Key<T> tagSection(String tagName, java.lang.String section, In<String> superSection, Type<T> type) {
+        return this.tagSection(tagName, section, type, superSection);
+    }
+
+    public boolean isInsideSection() {
+        return insideSection;
+    }
+
+    @Override
+    public <T> Key<T> getSection(In<String> in) {
+        LinkedList<String> linkedList = new LinkedList<>(Arrays.asList(in.getPath()));
+        String first = linkedList.removeLast();
+        String[] path = linkedList.toArray(new String[linkedList.size()]);
+        return getValue(first, In.path(path));
+    }
+
+    @Override
+    public <T> Key<T> getValue(String tagName, In<String> in) {
+        Objects.requireNonNull(in);
+
+        if(in.isMain()) {
+            if(sectionsAndKeys.containsKey(tagName)) {
+                Key<?> key = sectionsAndKeys.get(tagName);
+                return (Key<T>) key;
+            } else {
+                return KeyImpl.empty();
+            }
+        }else{
+            if(!insideSection) {
+                throw new NotInsideSection("Cannot navigate through sections if insideSection = false");
+            }
+            String[] path = in.getPath();
+            int x = 0;
+            String aliasName = path[0];
+            Section sec = null;
+            if(sectionsAndKeys.containsKey(aliasName)) {
+                Key<?> checkKey = sectionsAndKeys.get(aliasName);
+
+                if(checkKey instanceof Section) {
+                    sec = (Section) checkKey;
+                }else {
+                    return KeyImpl.empty();
+                }
+
+                while(x + 1 < path.length){
+                    ++x;
+                    aliasName = path[x];
+                    if(sec.containsKey(aliasName) && (checkKey = sec.getKey(aliasName)) instanceof Section){
+                        sec = (Section) checkKey;
+                    }else{
+                        return KeyImpl.empty();
+                    }
+                }
+
+                if(sec.containsKey(tagName)) {
+                    return sec.getKey(tagName);
+                }else{
+                    return KeyImpl.empty();
+                }
+            }
+        }
+        return KeyImpl.empty();
+
+    }
+
+    @Override
+    public UnknownValueHolder internal__getValueFromPath(java.lang.String pathName) {
+        java.lang.String[] dotSplit = pathName.split("\\.");
+        LinkedList<java.lang.String> dotList = new LinkedList<>(Arrays.asList(dotSplit));
+
+        java.lang.String tagName = dotList.removeLast();
+
+        In in = In.MAIN;
+
+        if(!dotList.isEmpty()) {
+            java.lang.String[] path = dotList.toArray(new java.lang.String[dotList.size()]);
+            in = In.path(path);
+        }
+
+        Key<?> key = getValue(tagName, in);
+        return key.getValue();
+    }
+
+    @Override
+    public <T> ValueHolder<T> internal__getValueFromPath(java.lang.String pathName, Translator<T> translator) {
+        java.lang.String[] dotSplit = pathName.split("\\.");
+        LinkedList<java.lang.String> dotList = new LinkedList<>(Arrays.asList(dotSplit));
+
+        java.lang.String tagName = dotList.removeLast();
+
+        In in = In.MAIN;
+
+        if(!dotList.isEmpty()) {
+            java.lang.String[] path = dotList.toArray(new java.lang.String[dotList.size()]);
+            in = In.path(path);
+        }
+
+        Key<?> key = getValue(tagName, in);
+        return key.getUnknownValue(translator);
+    }
+}
