@@ -37,14 +37,9 @@ repositories {
         dirs 'libs'
     }
     mavenCentral()
-    maven {
-        name 'Spigot MC'
-        url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
-    }
 }
 
 dependencies {
-    compile group: 'org.spigotmc', name: 'spigot-api', version: '1.8.8-R0.1-SNAPSHOT'
     compile group: 'com.udojava', name: 'EvalEx', version: '1.0'
 }
 

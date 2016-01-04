@@ -1,3 +1,21 @@
+/*
+ * 	Configurator - Easy way to manage configurations (for Bukkit)
+ *     Copyright (C) 2016 TheRealBuggy/JonathanxD (https://github.com/JonathanxD/) <jonathan.scripter@programmer.net>
+ *
+ * 	GNU GPLv3
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU Affero General Public License as published
+ *     by the Free Software Foundation.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package github.therealbuggy.test;
 
 import java.util.Collection;
@@ -16,7 +34,7 @@ import github.therealbuggy.configurator.types.ValueTypes;
 public class Main {
 
     public static void main(String[] args) {
-        IConfigurator<String> configurator = new Configurator<String>(true, new BackEndIConfigurator() {
+        IConfigurator<String> configurator = new Configurator<String>(new BackEndIConfigurator() {
             @Override
             public void createSection(String section) {
 
@@ -66,7 +84,7 @@ public class Main {
         configurator.tagSection("INTERVALO", "tempo", In.path("PRINCIPAL"));
 
 
-        configurator.tagSection("TIME", "interval", ValueTypes.INT, In.path("PRINCIPAL", "INTERVALO"));
+        configurator.tagSection("TIME", "interval", ValueTypes.IntType(), In.path("PRINCIPAL", "INTERVALO"));
 
 
         Key<?> key = configurator.getValue("TIME", In.path("PRINCIPAL", "INTERVALO"));

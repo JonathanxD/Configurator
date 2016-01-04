@@ -1,3 +1,21 @@
+/*
+ * 	Configurator - Easy way to manage configurations (for Bukkit)
+ *     Copyright (C) 2016 TheRealBuggy/JonathanxD (https://github.com/JonathanxD/) <jonathan.scripter@programmer.net>
+ *
+ * 	GNU GPLv3
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU Affero General Public License as published
+ *     by the Free Software Foundation.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package github.therealbuggy.configurator;
 
 import java.util.Collection;
@@ -13,11 +31,6 @@ import github.therealbuggy.configurator.types.Type;
  * Created by jonathan on 01/01/16.
  */
 
-/**
- * IConfigurator has 2 groups
- * 1. Group (this): External Implementations - All implementations here is an front-end to Group 2
- * 2. Group: Back-End IConfigurator: Handle your Configuration API to get Values from PATHS
- */
 public interface IConfigurator<E> {
 
     Key<?> tagSection(E tagObject, String section);
