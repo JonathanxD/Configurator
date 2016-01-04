@@ -40,10 +40,6 @@ public class Test2 {
 
     public static void main(String[] args) {
         IConfigurator<Keys> configurator = new Configurator<Keys>(true, new BackEndIConfigurator() {
-            @Override
-            public void createSection(String path) {
-
-            }
 
             @Override
             public boolean valueExists(String path) {

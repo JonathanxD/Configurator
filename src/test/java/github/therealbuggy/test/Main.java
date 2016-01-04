@@ -35,10 +35,6 @@ public class Main {
 
     public static void main(String[] args) {
         IConfigurator<String> configurator = new Configurator<String>(new BackEndIConfigurator() {
-            @Override
-            public void createSection(String section) {
-
-            }
 
             @Override
             public Object getValueFromPath(String path) {

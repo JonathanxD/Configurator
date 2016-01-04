@@ -27,11 +27,6 @@ import github.therealbuggy.configurator.types.Type;
  * Created by jonathan on 01/01/16.
  */
 public interface BackEndIConfigurator {
-    /**
-     * Create new Section
-     * @param section
-     */
-    void createSection(String path);
 
     /**
      * Define new value
