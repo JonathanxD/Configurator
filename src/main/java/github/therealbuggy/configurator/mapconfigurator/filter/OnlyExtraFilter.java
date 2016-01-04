@@ -1,27 +1,26 @@
 package github.therealbuggy.configurator.mapconfigurator.filter;
 
 import github.therealbuggy.configurator.key.Key;
-import github.therealbuggy.configurator.key.KeyUtil;
 
 /**
  * Created by jonathan on 04/01/16.
  */
-public class KeyFilter<E> implements ExtraFilter<E, Key<?>> {
+public class OnlyExtraFilter<E> implements ExtraFilter<E, Key<?>> {
 
     private final E extraValue;
 
-    public KeyFilter(){
+    public OnlyExtraFilter(){
         this(null);
     }
 
-    public KeyFilter(E extraValue){
+    public OnlyExtraFilter(E extraValue){
         this.extraValue = extraValue;
     }
 
 
     @Override
     public boolean filter(Key<?> value) {
-        return !KeyUtil.isSection(value) && !KeyUtil.isNullKey(value);
+        return true;
     }
 
     @Override

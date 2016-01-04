@@ -5,9 +5,9 @@ import github.therealbuggy.configurator.holder.UnknownValueHolder;
 import github.therealbuggy.configurator.holder.ValueHolder;
 import github.therealbuggy.configurator.key.Key;
 import github.therealbuggy.configurator.key.KeyImpl;
-import github.therealbuggy.configurator.key.KeyUtil;
-import github.therealbuggy.configurator.mapconfigurator.filter.Filter;
+import github.therealbuggy.configurator.mapconfigurator.filter.ExtraFilter;
 import github.therealbuggy.configurator.mapconfigurator.filter.KeyFilter;
+import github.therealbuggy.configurator.mapconfigurator.filter.OnlyExtraFilter;
 import github.therealbuggy.configurator.mapconfigurator.filter.SectionFilter;
 import github.therealbuggy.configurator.nav.In;
 import github.therealbuggy.configurator.sections.Section;
@@ -120,67 +120,28 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
     @Override
     public <T> Key<T> getValue(E tagName, In<E> in) {
         Objects.requireNonNull(in);
+        Collection<Key<?>> keys = getFiltering(in, new OnlyExtraFilter<>(tagName));
 
-        if(in.isMain()) {
-            if(sectionsAndKeys.containsKey(tagName)) {
-                Key<?> key = sectionsAndKeys.get(tagName);
-                return (Key<T>) key;
-            } else {
-                return KeyImpl.empty();
-            }
-        }else{
-            if(!insideSection) {
-                throw new NotInsideSection("Cannot navigate through sections if insideSection = false");
-            }
-            E[] path = in.getPath();
-            int x = 0;
-            E aliasName = path[0];
-            Section sec = null;
-            if(sectionsAndKeys.containsKey(aliasName)) {
-                Key<?> checkKey = sectionsAndKeys.get(aliasName);
-
-                if(checkKey instanceof Section) {
-                    sec = (Section) checkKey;
-                }else {
-                    return KeyImpl.empty();
-                }
-
-                while(x + 1 < path.length){
-                    ++x;
-                    aliasName = path[x];
-                    if(sec.containsKey(aliasName) && (checkKey = sec.getKey(aliasName)) instanceof Section){
-                        sec = (Section) checkKey;
-                    }else{
-                        return KeyImpl.empty();
-                    }
-                }
-
-                if(sec.containsKey(tagName)) {
-                    return sec.getKey(tagName);
-                }else{
-                    return KeyImpl.empty();
-                }
-            }
+        for(Key<?> key : keys){
+            return (Key<T>) key;
         }
-        return KeyImpl.empty();
 
+        return KeyImpl.empty();
     }
 
-
-
-    @SuppressWarnings("unchecked")
     @Override
     public Collection<Key<?>> getValues(In<E> in) {
-        return getFiltering(in, new KeyFilter());
+        return getFiltering(in, new KeyFilter<E>());
     }
 
 
     @Override
     public Collection<Key<?>> getSections(In<E> in) {
-        return getFiltering(in, new SectionFilter());
+        return getFiltering(in, new SectionFilter<E>());
     }
 
-    private Collection<Key<?>> getFiltering(In<E> in, Filter<Key<?>> filter) {
+    @SuppressWarnings("unchecked")
+    private Collection<Key<?>> getFiltering(In<E> in, ExtraFilter<E, Key<?>> filter) {
         Objects.requireNonNull(in);
         Map<E, Key<?>> map = null;
         Collection<Key<?>> returnKeys;
@@ -218,13 +179,10 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
             map = sectionsAndKeys;
         }
         if(map != null){
-            returnKeys = new ArrayList<>(map.values());
-
-            Iterator<Key<?>> keyIterator = returnKeys.iterator();
-            while (keyIterator.hasNext()) {
-                Key<?> key = keyIterator.next();
-                if(!filter.filter(key)) {
-                    keyIterator.remove();
+            returnKeys = new ArrayList<>();
+            for(Map.Entry<?, Key<?>> entry : map.entrySet()){
+                if(filter.filter((E) entry.getKey(), entry.getValue())) {
+                   returnKeys.add(entry.getValue());
                 }
             }
             return returnKeys;
