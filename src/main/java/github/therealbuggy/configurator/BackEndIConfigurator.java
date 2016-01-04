@@ -20,6 +20,7 @@ package github.therealbuggy.configurator;
 
 
 import java.util.Collection;
+import java.util.Map;
 
 import github.therealbuggy.configurator.types.Type;
 
@@ -55,7 +56,7 @@ public interface BackEndIConfigurator {
      * @param path Path to values
      * @return Values
      */
-    Collection<Object> getValuesOnPath(String path);
+    Map<String, Object> getValuesOnPath(String path);
 
     /**
      * Get all paths of sections in determinate path

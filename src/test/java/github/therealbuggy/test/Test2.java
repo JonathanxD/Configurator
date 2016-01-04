@@ -19,6 +19,7 @@
 package github.therealbuggy.test;
 
 import java.util.Collection;
+import java.util.Map;
 
 import github.therealbuggy.configurator.BackEndIConfigurator;
 import github.therealbuggy.configurator.Configurator;
@@ -66,7 +67,7 @@ public class Test2 {
             }
 
             @Override
-            public Collection<Object> getValuesOnPath(String path) {
+            public Map<String ,Object> getValuesOnPath(String path) {
                 return null;
             }
 
