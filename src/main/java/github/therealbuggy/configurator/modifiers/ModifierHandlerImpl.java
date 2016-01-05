@@ -32,8 +32,18 @@ public class ModifierHandlerImpl<T> implements IModifierHandler<T> {
     @Override
     public T modify(T valueToModify) {
         T valueClone = Reflection.tryClone(valueToModify);
+        // Auto translate
+
         for(IModifier<T> modifier : modifierSet) {
-            valueClone = modifier.modify(valueClone);
+            T tmp = modifier.getLocale().translate(valueToModify);
+            if(tmp != null){
+                valueClone = tmp;
+            }
+            tmp = modifier.modify(valueClone);
+            if(tmp != null){
+                valueClone = tmp;
+            }
+
         }
         return valueClone;
     }

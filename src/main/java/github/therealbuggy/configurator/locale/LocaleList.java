@@ -48,7 +48,10 @@ public class LocaleList<T>  {
         T valueClone = Reflection.tryClone(valueToModify);
         for(T value : values){
             for(ILocale<T> modifier : localeSet) {
-                valueClone = modifier.translate(value);
+                T tmp = modifier.translate(value);
+                if(tmp != null) {
+                    valueClone = tmp;
+                }
             }
         }
         return valueClone;
