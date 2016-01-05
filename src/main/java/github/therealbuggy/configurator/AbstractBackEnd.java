@@ -30,7 +30,7 @@ public abstract class AbstractBackEnd implements BackEndIConfigurator {
         return this.getValuesOnPath(null);
     }
 
-    public Collection<String> getSectionsOnPath() {
+    public Map<String, Object> getSectionsOnPath() {
         return this.getSectionsOnPath(null);
     }
 }

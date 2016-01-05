@@ -63,6 +63,6 @@ public interface BackEndIConfigurator {
      * @param path Path to Sections
      * @return Sections path
      */
-    Collection<String> getSectionsOnPath(String path);
+    Map<String, Object> getSectionsOnPath(String path);
 
 }

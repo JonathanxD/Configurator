@@ -67,7 +67,7 @@ public class Main {
             }
 
             @Override
-            public Collection<String> getSectionsOnPath(String path) {
+            public Map<String, Object> getSectionsOnPath(String path) {
                 return null;
             }
         }){
