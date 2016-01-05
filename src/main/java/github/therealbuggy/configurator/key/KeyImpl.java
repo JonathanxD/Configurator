@@ -33,17 +33,19 @@ public class KeyImpl<T> implements Key<T> {
     private final String path;
     private final Section section;
     private final Type<T> type;
+    private final Translator<?> valueTranslator;
     private final BackEndIConfigurator iConfigurator;
 
     private KeyImpl() {
-        this(null, null, null, null, null);
+        this(null, null, null, null, null, null);
     }
 
-    public KeyImpl(String name, String path, Section section, Type<T> type, BackEndIConfigurator configurator) {
+    public KeyImpl(String name, String path, Section section, Type<T> type, Translator<?> valueTranslator, BackEndIConfigurator configurator) {
         this.name = name;
         this.path = path;
         this.section = section;
         this.type = type;
+        this.valueTranslator = valueTranslator;
         this.iConfigurator = configurator;
     }
 
@@ -57,24 +59,26 @@ public class KeyImpl<T> implements Key<T> {
         return type;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public ValueHolder<T> getKnowValue(Translator<T> translator) {
+    public ValueHolder<T> getKnowValue() {
         if(!this.iConfigurator.valueExists(getPath())){
             throw new CannotFindPath(getPath());
         }
-        return new ValueHolder<>(translator.translate(this.iConfigurator.getValueFromPathAsString(getPath())));
+        return (ValueHolder<T>) new ValueHolder<>(valueTranslator.translate(this.iConfigurator.getValueFromPathAsString(getPath())));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public <E> ValueHolder<E> getValue(Translator<E> translator) {
+    public <E> ValueHolder<E> getValue() {
         if(!this.iConfigurator.valueExists(getPath())){
             throw new CannotFindPath(getPath());
         }
-        return new ValueHolder<>(translator.translate(this.iConfigurator.getValueFromPathAsString(getPath())));
+        return (ValueHolder<E>) new ValueHolder<>(valueTranslator.translate(this.iConfigurator.getValueFromPathAsString(getPath())));
     }
 
     @Override
-    public UnknownValueHolder getValue() {
+    public UnknownValueHolder getUnknownValue() {
         if(!this.iConfigurator.valueExists(getPath())){
             throw new CannotFindPath(getPath());
         }
@@ -108,5 +112,10 @@ public class KeyImpl<T> implements Key<T> {
 
     public boolean isEmpty() {
         return this == empty() || type == null;
+    }
+
+    @Override
+    public Translator<?> getValueTranslator() {
+        return valueTranslator;
     }
 }

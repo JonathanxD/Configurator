@@ -77,14 +77,14 @@ public class Test2 {
         };
 
         configurator.setSectionAlias(Keys.MAIN_KEY, "Magination");
-        configurator.setSectionAlias(Keys.FKEY, "Cooldown", In.path(Keys.MAIN_KEY), ValueTypes.INT_TYPE.setValue(7).build());
+        configurator.setSectionAlias(Keys.FKEY, "Cooldown", In.path(Keys.MAIN_KEY), ValueTypes.INT_TYPE.setValue(7).build(), DefaultTranslators.getIntTranslator(configurator));
         Key<?> key = configurator.getValue(Keys.FKEY, In.path(Keys.MAIN_KEY));
         In<Keys> in = In.main();
         for(Key<?> kei : configurator.getSections(in)){
             System.out.println("Kei: "+ kei.getPath());
         }
 
-        System.out.println("Key: "+key.getValue(DefaultTranslators.getIntTranslator(configurator)).getValue());
+        System.out.println("Key: "+key.getValue().getValue());
         /*
         Configurator configurator = new Configurator();
         configurator.setSectionAlias("MAIN", "uplg");

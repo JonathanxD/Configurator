@@ -29,14 +29,16 @@ public interface Key<T> {
 
     Section section();
     Type<T> getType();
-    ValueHolder<T> getKnowValue(Translator<T> translator);
-    UnknownValueHolder getValue();
+    ValueHolder<T> getKnowValue();
+    UnknownValueHolder getUnknownValue();
+
+    Translator<?> getValueTranslator();
 
     BackEndIConfigurator getBackEndConfigurator();
     String getPath();
     String getName();
     boolean isMain();
 
-    <E> ValueHolder<E> getValue(Translator<E> translator);
+    <E> ValueHolder<E> getValue();
 
 }

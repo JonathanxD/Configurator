@@ -34,19 +34,22 @@ public abstract class NullKey implements Key {
     }
 
     @Override
-    public ValueHolder getKnowValue(Translator translator) {
+    public ValueHolder getKnowValue() {
         throw new CannotGetValue("Cannot getKnowValue of a NullKey (or Section)");
     }
 
     @Override
-    public ValueHolder getValue(Translator translator) {
+    public ValueHolder getValue() {
         throw new CannotGetValue("Cannot getValue of a NullKey (or Section)");
     }
 
     @Override
-    public UnknownValueHolder getValue() {
+    public UnknownValueHolder getUnknownValue() {
         throw new CannotGetValue("Cannot getValue of a NullKey (or Section)");
     }
 
-
+    @Override
+    public Translator<?> getValueTranslator() {
+        throw new CannotGetValue("Cannot getValueTranslator of a NullKey (or Section)");
+    }
 }

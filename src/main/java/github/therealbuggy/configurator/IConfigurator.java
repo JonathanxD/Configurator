@@ -37,12 +37,17 @@ public interface IConfigurator<E> {
 
     Key<?> setSectionAlias(E aliasObject, String section);
     <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type);
+    <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type, Translator<?> valueTranslator);
     <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type, In<E> superSection);
+    <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type, In<E> superSection, Translator<?> valueTranslator);
     Key<?> setSectionAlias(E aliasObject, String section, In<E> superSection);
     <T> Key<T> setSectionAlias(E aliasObject, String section, In<E> superSection, Type<T> type);
+    <T> Key<T> setSectionAlias(E aliasObject, String section, In<E> superSection, Type<T> type, Translator<?> valueTranslator);
 
     Key<?> setKeyAlias(E aliasObject, String section);
+    Key<?> setKeyAlias(E aliasObject, String section, Translator<?> valueTranslator);
     Key<?> setKeyAlias(E aliasObject, String section, In<E> superSection);
+    Key<?> setKeyAlias(E aliasObject, String section, In<E> superSection, Translator<?> valueTranslator);
 
     <T> Key<T> getSection(In<E> in);
 

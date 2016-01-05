@@ -61,7 +61,7 @@ public class Main {
 
             @Override
             public boolean valueExists(String path) {
-                return false;
+                return true;
             }
 
             @Override
@@ -79,14 +79,14 @@ public class Main {
         configurator.setSectionAlias("INTERVALO", "tempo", In.path("PRINCIPAL"));
 
 
-        configurator.setSectionAlias("TIME", "interval", ValueTypes.IntType(), In.path("PRINCIPAL", "INTERVALO"));
+        configurator.setSectionAlias("TIME", "interval", ValueTypes.IntType(), In.path("PRINCIPAL", "INTERVALO"), DefaultTranslators.getIntTranslator(configurator));
 
 
         Key<?> key = configurator.getValue("TIME", In.path("PRINCIPAL", "INTERVALO"));
 
         if(!KeyUtil.isEmptyKey(key)){
             System.out.println(key.getValue());
-            System.out.println(key.getValue(DefaultTranslators.getIntTranslator(configurator)).getValue());
+            System.out.println(key.getValue().getValue());
         }
         
     }

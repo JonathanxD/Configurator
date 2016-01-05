@@ -31,6 +31,7 @@ import github.therealbuggy.configurator.modifiers.ModifierHandlerImpl;
 import github.therealbuggy.configurator.nav.In;
 import github.therealbuggy.configurator.sections.Section;
 import github.therealbuggy.configurator.translator.Translator;
+import github.therealbuggy.configurator.translator.UniversalTranslator;
 import github.therealbuggy.configurator.types.Type;
 import github.therealbuggy.configurator.types.ValueTypes;
 
@@ -48,18 +49,66 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
 
     @Override
     public Key<?> setSectionAlias(E aliasObject, String section) {
-        return this.setSectionAlias(aliasObject, section, null, In.<E>main());
+        return this.set(aliasObject, section, null, In.<E>main(), null);
     }
 
     @Override
     public <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type) {
-        return this.setSectionAlias(aliasObject, section, type, In.<E>main());
+        return this.set(aliasObject, section, type, In.<E>main(), new UniversalTranslator(this));
+    }
+
+    @Override
+    public <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type, Translator<?> valueTranslator) {
+        return this.set(aliasObject, section, type, In.<E>main(), valueTranslator);
+    }
+
+    @Override
+    public <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type, In<E> superSection) {
+        return this.set(aliasObject, section, type, In.<E>main(), new UniversalTranslator(this));
+    }
+
+    @Override
+    public <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type, In<E> superSection, Translator<?> valueTranslator) {
+        return this.set(aliasObject, section, type, superSection, valueTranslator);
+    }
+
+    @Override
+    public Key<?> setSectionAlias(E aliasObject, String section, In<E> superSection) {
+        return this.setSectionAlias(aliasObject, section, null, superSection, null);
+    }
+
+    @Override
+    public <T> Key<T> setSectionAlias(E aliasObject, String section, In<E> superSection, Type<T> type) {
+        return this.setSectionAlias(aliasObject, section, type, superSection, new UniversalTranslator(this));
+    }
+
+    @Override
+    public <T> Key<T> setSectionAlias(E aliasObject, String section, In<E> superSection, Type<T> type, Translator<?> valueTranslator) {
+        return this.set(aliasObject, section, type, superSection, valueTranslator);
+    }
+
+    @Override
+    public Key<?> setKeyAlias(E aliasObject, String section) {
+        return this.set(aliasObject, section, ValueTypes.AnyType(), In.<E>main(), new UniversalTranslator(this));
+    }
+
+    @Override
+    public Key<?> setKeyAlias(E aliasObject, String section, Translator<?> valueTranslator) {
+        return this.set(aliasObject, section, ValueTypes.AnyType(), In.<E>main(), valueTranslator);
+    }
+
+    @Override
+    public Key<?> setKeyAlias(E aliasObject, String section, In<E> superSection) {
+        return this.set(aliasObject, section, ValueTypes.AnyType(), superSection, new UniversalTranslator(this));
+    }
+
+    @Override
+    public Key<?> setKeyAlias(E aliasObject, String section, In<E> superSection, Translator<?> valueTranslator) {
+        return this.set(aliasObject, section, ValueTypes.AnyType(), superSection, valueTranslator);
     }
 
     @SuppressWarnings("unchecked")
-    @Override
-    public <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type, In<E> superSection) {
-
+    private <T> Key<T> set(E aliasObject, String section, Type<T> type, In<E> superSection, Translator<?> valueTranslator) {
         Section supSection = null;
         if(superSection != null){
             Key<?> key = null;
@@ -74,9 +123,13 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
         }
 
         if(type != null){
+            if(valueTranslator == null) {
+                valueTranslator = new UniversalTranslator(this);
+            }
+
             String path = (supSection != null ? supSection.getPath() + "." + section : section);
 
-            Key<T> key = new KeyImpl<>(section, path, supSection, type, this.backEndIConfigurator);
+            Key<T> key = new KeyImpl<>(section, path, supSection, type, valueTranslator, this.backEndIConfigurator);
             if(!backEndIConfigurator.valueExists(key.getPath())) {
                 backEndIConfigurator.setValueToPath(key.getPath(), type);
             }
@@ -97,27 +150,6 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
 
             return sectionInstance;
         }
-
-    }
-
-    @Override
-    public Key<?> setSectionAlias(E aliasObject, String section, In<E> superSection) {
-        return this.setSectionAlias(aliasObject, section, null, superSection);
-    }
-
-    @Override
-    public <T> Key<T> setSectionAlias(E aliasObject, String section, In<E> superSection, Type<T> type) {
-        return this.setSectionAlias(aliasObject, section, type, superSection);
-    }
-
-    @Override
-    public Key<?> setKeyAlias(E aliasObject, String section) {
-        return setSectionAlias(aliasObject, section, ValueTypes.AnyType());
-    }
-
-    @Override
-    public Key<?> setKeyAlias(E aliasObject, String section, In<E> superSection) {
-        return setSectionAlias(aliasObject, section, ValueTypes.AnyType(), superSection);
     }
 
     @SuppressWarnings({"unchecked", "SuspiciousToArrayCall"})
