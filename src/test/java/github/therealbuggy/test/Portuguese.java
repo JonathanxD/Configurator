@@ -16,13 +16,19 @@
  *     You should have received a copy of the GNU Affero General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package github.therealbuggy.configurator.modifiers;
+package github.therealbuggy.test;
 
-import github.therealbuggy.configurator.locale.LocaleList;
+import github.therealbuggy.configurator.locale.ILocale;
 
-public interface IModifier<T> {
-
-    T modify(T value);
-
-    LocaleList<T> getLocale();
+/**
+ * Created by jonathan on 05/01/16.
+ */
+public class Portuguese implements ILocale<String> {
+    @Override
+    public String translate(String value) {
+        if(value.equalsIgnoreCase("%DARK_BLUE%|%DBLUE%")){
+            return "%AZUL_ESCURO%|%AZULE%";
+        }
+        return null;
+    }
 }

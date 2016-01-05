@@ -21,13 +21,28 @@ package github.therealbuggy.test;
 import java.awt.*;
 
 import github.therealbuggy.configurator.modifiers.IModifier;
+import github.therealbuggy.configurator.locale.LocaleList;
 
 /**
  * Sample color modifier
  */
 public class ColorModifier implements IModifier<String> {
+
+    private final LocaleList<String> locale;
+
+    ColorModifier(LocaleList<String> locale){
+        this.locale = locale;
+    }
+
     @Override
     public String modify(String value) {
-        return value.replaceAll("%DARK_BLUE%|%DBLUE%", String.valueOf(Color.BLUE));
+        String toReplace = locale.translate("%DARK_GRAY%|%DGRAY%");
+        value = value.replaceAll(toReplace, String.valueOf(Color.DARK_GRAY));
+        return value.replaceAll("%DARK_BLUE%|%DBLUE%", String.valueOf(Color.DARK_GRAY));
+    }
+
+    @Override
+    public LocaleList<String> getLocale() {
+        return locale;
     }
 }
