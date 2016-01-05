@@ -20,12 +20,11 @@ package github.therealbuggy.configurator.translator;
 
 import github.therealbuggy.configurator.IConfigurator;
 import github.therealbuggy.configurator.modifiers.IModifierHandler;
-import github.therealbuggy.configurator.modifiers.ModifierHandlerImpl;
 
 
 public abstract class ModifierTranslator<T> extends Translator<T> {
 
-    IModifierHandler<String> modifierHandler = new ModifierHandlerImpl<>();
+
 
     ModifierTranslator() {
         super();
@@ -34,15 +33,18 @@ public abstract class ModifierTranslator<T> extends Translator<T> {
         super(configurator);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public T translate(String expression) {
+        IModifierHandler<String> modifierHandler = getConfigurator().getModifierHandler();
         String modExpression = modifierHandler.modify(expression);
         return valueTranslate(modExpression);
     }
 
 
+    @SuppressWarnings("unchecked")
     @Override
     public IModifierHandler<String> getIModifierHandler() {
-        return this.modifierHandler;
+        return getConfigurator().getModifierHandler();
     }
 }

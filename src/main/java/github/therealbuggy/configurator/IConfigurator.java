@@ -23,6 +23,8 @@ import java.util.Collection;
 import github.therealbuggy.configurator.holder.UnknownValueHolder;
 import github.therealbuggy.configurator.holder.ValueHolder;
 import github.therealbuggy.configurator.key.Key;
+import github.therealbuggy.configurator.modifiers.IModifierHandler;
+import github.therealbuggy.configurator.modifiers.ModifierHandlerImpl;
 import github.therealbuggy.configurator.nav.In;
 import github.therealbuggy.configurator.translator.Translator;
 import github.therealbuggy.configurator.types.Type;
@@ -46,4 +48,6 @@ public interface IConfigurator<E> {
 
     UnknownValueHolder internal__getValueFromPath(String pathName);
     <T> ValueHolder<T> internal__getValueFromPath(String pathName, Translator<T> translator);
+
+    IModifierHandler<String> getModifierHandler();
 }

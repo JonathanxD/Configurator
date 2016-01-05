@@ -26,6 +26,8 @@ import github.therealbuggy.configurator.mapconfigurator.filter.ExtraFilter;
 import github.therealbuggy.configurator.mapconfigurator.filter.KeyFilter;
 import github.therealbuggy.configurator.mapconfigurator.filter.OnlyExtraFilter;
 import github.therealbuggy.configurator.mapconfigurator.filter.SectionFilter;
+import github.therealbuggy.configurator.modifiers.IModifierHandler;
+import github.therealbuggy.configurator.modifiers.ModifierHandlerImpl;
 import github.therealbuggy.configurator.nav.In;
 import github.therealbuggy.configurator.sections.Section;
 import github.therealbuggy.configurator.translator.Translator;
@@ -36,6 +38,8 @@ import java.util.*;
 public abstract class MapConfigurator<E> implements IConfigurator<E>{
     private final Map<E, Key<?>> sectionsAndKeys = new HashMap<>();
     private final BackEndIConfigurator backEndIConfigurator;
+    private final IModifierHandler<String> modifierHandler = new ModifierHandlerImpl<>();
+
 
     MapConfigurator(BackEndIConfigurator backEndIConfigurator) {
         this.backEndIConfigurator = backEndIConfigurator;
@@ -196,4 +200,8 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
     }
 
 
+    @Override
+    public IModifierHandler<String> getModifierHandler() {
+        return modifierHandler;
+    }
 }
