@@ -19,6 +19,7 @@
 package github.therealbuggy.configurator.key;
 
 import github.therealbuggy.configurator.BackEndIConfigurator;
+import github.therealbuggy.configurator.exceptions.CannotFindPath;
 import github.therealbuggy.configurator.holder.UnknownValueHolder;
 import github.therealbuggy.configurator.holder.ValueHolder;
 import github.therealbuggy.configurator.sections.Section;
@@ -36,14 +37,6 @@ public class KeyImpl<T> implements Key<T> {
 
     private KeyImpl() {
         this(null, null, null, null, null);
-    }
-
-    public KeyImpl(String path, Type<T> type) {
-        this(null, path, null, type, null);
-    }
-
-    public KeyImpl(String path, Section section, Type<T> type) {
-        this(null, path, section, type, null);
     }
 
     public KeyImpl(String name, String path, Section section, Type<T> type, BackEndIConfigurator configurator) {
@@ -66,16 +59,25 @@ public class KeyImpl<T> implements Key<T> {
 
     @Override
     public ValueHolder<T> getKnowValue(Translator<T> translator) {
+        if(!this.iConfigurator.valueExists(getPath())){
+            throw new CannotFindPath(getPath());
+        }
         return new ValueHolder<>(translator.translate(this.iConfigurator.getValueFromPathAsString(getPath())));
     }
 
     @Override
     public <E> ValueHolder<E> getValue(Translator<E> translator) {
+        if(!this.iConfigurator.valueExists(getPath())){
+            throw new CannotFindPath(getPath());
+        }
         return new ValueHolder<>(translator.translate(this.iConfigurator.getValueFromPathAsString(getPath())));
     }
 
     @Override
     public UnknownValueHolder getValue() {
+        if(!this.iConfigurator.valueExists(getPath())){
+            throw new CannotFindPath(getPath());
+        }
         return new UnknownValueHolder(this.iConfigurator.getValueFromPath(getPath()));
     }
 

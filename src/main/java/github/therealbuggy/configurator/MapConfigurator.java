@@ -32,6 +32,7 @@ import github.therealbuggy.configurator.nav.In;
 import github.therealbuggy.configurator.sections.Section;
 import github.therealbuggy.configurator.translator.Translator;
 import github.therealbuggy.configurator.types.Type;
+import github.therealbuggy.configurator.types.ValueTypes;
 
 import java.util.*;
 
@@ -46,18 +47,18 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
     }
 
     @Override
-    public Key<?> tagSection(E tagName, String section) {
-        return this.tagSection(tagName, section, null, In.<E>main());
+    public Key<?> setSectionAlias(E aliasObject, String section) {
+        return this.setSectionAlias(aliasObject, section, null, In.<E>main());
     }
 
     @Override
-    public <T> Key<T> tagSection(E tagName, String section, Type<T> type) {
-        return this.tagSection(tagName, section, type, In.<E>main());
+    public <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type) {
+        return this.setSectionAlias(aliasObject, section, type, In.<E>main());
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> Key<T> tagSection(E tagName, String section, Type<T> type, In<E> superSection) {
+    public <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type, In<E> superSection) {
 
         Section supSection = null;
         if(superSection != null){
@@ -80,18 +81,18 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
                 backEndIConfigurator.setValueToPath(key.getPath(), type);
             }
             if(supSection != null){
-                supSection.setKey(tagName, key);
+                supSection.setKey(aliasObject, key);
             }else{
-                sectionsAndKeys.put(tagName, key);
+                sectionsAndKeys.put(aliasObject, key);
             }
             return key;
         } else {
             Section sectionInstance = new Section(section, supSection, this.backEndIConfigurator);
 
             if(supSection != null){
-                supSection.setKey(tagName, sectionInstance);
+                supSection.setKey(aliasObject, sectionInstance);
             }else{
-                sectionsAndKeys.put(tagName, sectionInstance);
+                sectionsAndKeys.put(aliasObject, sectionInstance);
             }
 
             return sectionInstance;
@@ -100,13 +101,23 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
     }
 
     @Override
-    public Key<?> tagSection(E tagName, String section, In<E> superSection) {
-        return this.tagSection(tagName, section, null, superSection);
+    public Key<?> setSectionAlias(E aliasObject, String section, In<E> superSection) {
+        return this.setSectionAlias(aliasObject, section, null, superSection);
     }
 
     @Override
-    public <T> Key<T> tagSection(E tagName, String section, In<E> superSection, Type<T> type) {
-        return this.tagSection(tagName, section, type, superSection);
+    public <T> Key<T> setSectionAlias(E aliasObject, String section, In<E> superSection, Type<T> type) {
+        return this.setSectionAlias(aliasObject, section, type, superSection);
+    }
+
+    @Override
+    public Key<?> setKeyAlias(E aliasObject, String section) {
+        return setSectionAlias(aliasObject, section, ValueTypes.AnyType());
+    }
+
+    @Override
+    public Key<?> setKeyAlias(E aliasObject, String section, In<E> superSection) {
+        return setSectionAlias(aliasObject, section, ValueTypes.AnyType(), superSection);
     }
 
     @SuppressWarnings({"unchecked", "SuspiciousToArrayCall"})
@@ -120,9 +131,9 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
 
     @SuppressWarnings({"unchecked", "LoopStatementThatDoesntLoop"})
     @Override
-    public <T> Key<T> getValue(E tagName, In<E> in) {
+    public <T> Key<T> getValue(E aliasObject, In<E> in) {
         Objects.requireNonNull(in);
-        Collection<Key<?>> keys = getFiltering(in, new OnlyExtraFilter<>(tagName));
+        Collection<Key<?>> keys = getFiltering(in, new OnlyExtraFilter<>(aliasObject));
 
         for(Key<?> key : keys){
             return (Key<T>) key;

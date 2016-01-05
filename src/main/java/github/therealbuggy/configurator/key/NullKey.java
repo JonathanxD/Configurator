@@ -18,6 +18,7 @@
  */
 package github.therealbuggy.configurator.key;
 
+import github.therealbuggy.configurator.exceptions.CannotGetValue;
 import github.therealbuggy.configurator.holder.UnknownValueHolder;
 import github.therealbuggy.configurator.holder.ValueHolder;
 import github.therealbuggy.configurator.translator.Translator;
@@ -29,22 +30,22 @@ import github.therealbuggy.configurator.types.Type;
 public abstract class NullKey implements Key {
     @Override
     public Type getType() {
-        return null;
+        throw new CannotGetValue("Cannot getType of a NullKey (or Section)");
     }
 
     @Override
     public ValueHolder getKnowValue(Translator translator) {
-        return null;
+        throw new CannotGetValue("Cannot getKnowValue of a NullKey (or Section)");
     }
 
     @Override
     public ValueHolder getValue(Translator translator) {
-        return null;
+        throw new CannotGetValue("Cannot getValue of a NullKey (or Section)");
     }
 
     @Override
     public UnknownValueHolder getValue() {
-        return null;
+        throw new CannotGetValue("Cannot getValue of a NullKey (or Section)");
     }
 
 

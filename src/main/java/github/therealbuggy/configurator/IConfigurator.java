@@ -35,13 +35,18 @@ import github.therealbuggy.configurator.types.Type;
 
 public interface IConfigurator<E> {
 
-    Key<?> tagSection(E tagObject, String section);
-    <T> Key<T> tagSection(E tagObject, String section, Type<T> type);
-    <T> Key<T> tagSection(E tagObject, String section, Type<T> type, In<E> superSection);
-    Key<?> tagSection(E tagObject, String section, In<E> superSection);
-    <T> Key<T> tagSection(E tagObject, String section, In<E> superSection, Type<T> type);
+    Key<?> setSectionAlias(E aliasObject, String section);
+    <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type);
+    <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type, In<E> superSection);
+    Key<?> setSectionAlias(E aliasObject, String section, In<E> superSection);
+    <T> Key<T> setSectionAlias(E aliasObject, String section, In<E> superSection, Type<T> type);
+
+    Key<?> setKeyAlias(E aliasObject, String section);
+    Key<?> setKeyAlias(E aliasObject, String section, In<E> superSection);
+
     <T> Key<T> getSection(In<E> in);
-    <T> Key<T> getValue(E tagObject, In<E> in);
+
+    <T> Key<T> getValue(E aliasObject, In<E> in);
 
     Collection<Key<?>> getValues(In<E> in);
     Collection<Key<?>> getSections(In<E> in);

@@ -76,8 +76,8 @@ public class Test2 {
 
         };
 
-        configurator.tagSection(Keys.MAIN_KEY, "Magination");
-        configurator.tagSection(Keys.FKEY, "Cooldown", In.path(Keys.MAIN_KEY), ValueTypes.INT_TYPE.setValue(7).build());
+        configurator.setSectionAlias(Keys.MAIN_KEY, "Magination");
+        configurator.setSectionAlias(Keys.FKEY, "Cooldown", In.path(Keys.MAIN_KEY), ValueTypes.INT_TYPE.setValue(7).build());
         Key<?> key = configurator.getValue(Keys.FKEY, In.path(Keys.MAIN_KEY));
         In<Keys> in = In.main();
         for(Key<?> kei : configurator.getSections(in)){
@@ -87,9 +87,9 @@ public class Test2 {
         System.out.println("Key: "+key.getValue(DefaultTranslators.getIntTranslator(configurator)).getValue());
         /*
         Configurator configurator = new Configurator();
-        configurator.tagSection("MAIN", "uplg");
-        configurator.tagSection("MESSAGER_SECTION", "messager", SuperSection.getSuperSection("MAIN"));
-        configurator.tagSection("TIME", "interval", SuperSection.getSuperSection("MESSAGER_SECTION"), ValueTypes.INT);
+        configurator.setSectionAlias("MAIN", "uplg");
+        configurator.setSectionAlias("MESSAGER_SECTION", "messager", SuperSection.getSuperSection("MAIN"));
+        configurator.setSectionAlias("TIME", "interval", SuperSection.getSuperSection("MESSAGER_SECTION"), ValueTypes.INT);
         ValueTypes.INT.translate(new UnknownValueHolder("9+7"));
         configurator.getValue("TIME", In("MAIN", "MESSAGER_SECTION"));
         */

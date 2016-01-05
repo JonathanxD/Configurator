@@ -72,14 +72,14 @@ public class Main {
 
         };
 
-        Key<?> main = configurator.tagSection("PRINCIPAL", "auto_command_plugin");
-        Key<?> commands = configurator.tagSection("COMANDOS", "commands", In.path("PRINCIPAL"));
+        Key<?> main = configurator.setSectionAlias("PRINCIPAL", "auto_command_plugin");
+        Key<?> commands = configurator.setSectionAlias("COMANDOS", "commands", In.path("PRINCIPAL"));
 
 
-        configurator.tagSection("INTERVALO", "tempo", In.path("PRINCIPAL"));
+        configurator.setSectionAlias("INTERVALO", "tempo", In.path("PRINCIPAL"));
 
 
-        configurator.tagSection("TIME", "interval", ValueTypes.IntType(), In.path("PRINCIPAL", "INTERVALO"));
+        configurator.setSectionAlias("TIME", "interval", ValueTypes.IntType(), In.path("PRINCIPAL", "INTERVALO"));
 
 
         Key<?> key = configurator.getValue("TIME", In.path("PRINCIPAL", "INTERVALO"));
