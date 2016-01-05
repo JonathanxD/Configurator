@@ -40,7 +40,7 @@ public class Test2 {
     }
 
     public static void main(String[] args) {
-        IConfigurator<Keys> configurator = new Configurator<Keys>(true, new BackEndIConfigurator() {
+        IConfigurator<Keys> configurator = new Configurator<Keys>(new BackEndIConfigurator() {
 
             @Override
             public boolean valueExists(String path) {

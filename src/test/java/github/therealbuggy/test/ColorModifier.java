@@ -16,27 +16,18 @@
  *     You should have received a copy of the GNU Affero General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package github.therealbuggy.configurator.translator;
+package github.therealbuggy.test;
 
-import com.udojava.evalex.Expression;
-import github.therealbuggy.configurator.IConfigurator;
+import java.awt.*;
 
-public class IntTranslator extends ExpressionTranslator<Integer> {
+import github.therealbuggy.configurator.modifiers.IModifier;
 
-    IntTranslator() {
-
-    }
-
-    public IntTranslator(IConfigurator configurator) {
-        super(configurator);
-    }
-
+/**
+ * Sample color modifier
+ */
+public class ColorModifier implements IModifier<String> {
     @Override
-    public Integer valueTranslate(String expressionString) {
-
-        Expression expression = getTranslatedExpression(expressionString);
-        return expression.eval().intValueExact();
+    public String modify(String value) {
+        return value.replaceAll("%DARK_BLUE%|%DBLUE%", String.valueOf(Color.BLUE));
     }
-
-
 }

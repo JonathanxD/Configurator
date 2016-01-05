@@ -16,40 +16,40 @@
  *     You should have received a copy of the GNU Affero General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package github.therealbuggy.configurator.sections;
+package github.therealbuggy.configurator.modifiers;
 
-import github.therealbuggy.configurator.BackEndIConfigurator;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
-public class Section<E> extends SectionNullKeyImpl {
-    private final String name;
-    private final Section superSection;
+import github.therealbuggy.configurator.utils.Reflection;
 
-    public Section(String name) {
-        this(name, null);
-    }
+public class ModifierHandlerImpl<T> implements IModifierHandler<T> {
 
-    public Section(String name, Section superSection) {
-        this(name, superSection, null);
-    }
+    private final Set<IModifier<T>> modifierSet = new HashSet<>();
 
-    public Section(String name, Section superSection, BackEndIConfigurator iConfigurator) {
-        super(superSection, iConfigurator);
-        this.name = name;
-        this.superSection = superSection;
+    @Override
+    public T modify(T valueToModify) {
+        T valueClone = Reflection.tryClone(valueToModify);
+        for(IModifier<T> modifier : modifierSet) {
+            valueClone = modifier.modify(valueClone);
+        }
+        return valueClone;
     }
 
     @Override
-    public Section section() {
-        return superSection;
+    public Collection<IModifier<T>> getModifiers() {
+        return Collections.unmodifiableSet(modifierSet);
     }
 
     @Override
-    public String getPath() {
-        return (superSection != null ? superSection.getPath()+"." : "") + this.name;
+    public void addModifier(IModifier<T> modifier) {
+        modifierSet.add(modifier);
     }
 
     @Override
-    public String getName() {
-        return name;
+    public void removeModifier(IModifier modifier) {
+        modifierSet.remove(modifier);
     }
 }

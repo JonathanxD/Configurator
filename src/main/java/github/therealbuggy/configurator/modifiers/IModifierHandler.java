@@ -16,27 +16,16 @@
  *     You should have received a copy of the GNU Affero General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package github.therealbuggy.configurator.translator;
+package github.therealbuggy.configurator.modifiers;
 
-import com.udojava.evalex.Expression;
-import github.therealbuggy.configurator.IConfigurator;
+import java.util.Collection;
 
-public class IntTranslator extends ExpressionTranslator<Integer> {
+public interface IModifierHandler<T> {
 
-    IntTranslator() {
+    T modify(T valueToModify);
 
-    }
-
-    public IntTranslator(IConfigurator configurator) {
-        super(configurator);
-    }
-
-    @Override
-    public Integer valueTranslate(String expressionString) {
-
-        Expression expression = getTranslatedExpression(expressionString);
-        return expression.eval().intValueExact();
-    }
-
+    Collection<IModifier<T>> getModifiers();
+    void addModifier(IModifier<T> modifier);
+    void removeModifier(IModifier<T> modifier);
 
 }

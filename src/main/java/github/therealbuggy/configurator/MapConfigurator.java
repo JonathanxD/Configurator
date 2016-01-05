@@ -34,48 +34,32 @@ import github.therealbuggy.configurator.types.Type;
 
 import java.util.*;
 
-/**
- * Created by jonathan on 01/01/16.
- */
 public abstract class MapConfigurator<E> implements IConfigurator<E>{
     private final Map<E, Key<?>> sectionsAndKeys = new HashMap<>();
-    @Deprecated
-    private final boolean insideSection;
     private final BackEndIConfigurator backEndIConfigurator;
 
-    /**
-     * @param insideSection Deprecated (may not work correctly if use this constructor)
-     * @param backEndIConfigurator
-     */
-    MapConfigurator(@Deprecated boolean insideSection, BackEndIConfigurator backEndIConfigurator) {
-        this.insideSection = insideSection;
-        this.backEndIConfigurator = backEndIConfigurator;
-    }
-
     MapConfigurator(BackEndIConfigurator backEndIConfigurator) {
-        this.insideSection = true;
         this.backEndIConfigurator = backEndIConfigurator;
     }
 
     @Override
     public Key<?> tagSection(E tagName, String section) {
-        return this.tagSection(tagName, section, null, In.MAIN);
+        return this.tagSection(tagName, section, null, In.<E>main());
     }
 
     @Override
     public <T> Key<T> tagSection(E tagName, String section, Type<T> type) {
-        return this.tagSection(tagName, section, type, In.MAIN);
+        return this.tagSection(tagName, section, type, In.<E>main());
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> Key<T> tagSection(E tagName, String section, Type<T> type, In<E> superSection) {
 
         Section supSection = null;
         if(superSection != null){
             Key<?> key = null;
-            if(!insideSection && !superSection.isMain()){
-                key = sectionsAndKeys.get(superSection.getPath()[0]);
-            }else if(insideSection && !superSection.isMain()){
+            if(!superSection.isMain()){
                 key = getSection(superSection);
             }
             if(key != null){
@@ -88,11 +72,11 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
         if(type != null){
             String path = (supSection != null ? supSection.getPath() + "." + section : section);
 
-            Key<T> key = new KeyImpl<>(path, supSection, type, this.backEndIConfigurator);
+            Key<T> key = new KeyImpl<>(section, path, supSection, type, this.backEndIConfigurator);
             if(!backEndIConfigurator.valueExists(key.getPath())) {
                 backEndIConfigurator.setValueToPath(key.getPath(), type);
             }
-            if(supSection != null && insideSection){
+            if(supSection != null){
                 supSection.setKey(tagName, key);
             }else{
                 sectionsAndKeys.put(tagName, key);
@@ -101,7 +85,7 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
         } else {
             Section sectionInstance = new Section(section, supSection, this.backEndIConfigurator);
 
-            if(supSection != null && insideSection){
+            if(supSection != null){
                 supSection.setKey(tagName, sectionInstance);
             }else{
                 sectionsAndKeys.put(tagName, sectionInstance);
@@ -122,11 +106,7 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
         return this.tagSection(tagName, section, type, superSection);
     }
 
-    @Deprecated
-    public boolean isInsideSection() {
-        return insideSection;
-    }
-
+    @SuppressWarnings("unchecked")
     @Override
     public <T> Key<T> getSection(In<E> in) {
         LinkedList<E> linkedList = new LinkedList<>(Arrays.asList(in.getPath()));
@@ -135,6 +115,7 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
         return getValue(first, In.path(path));
     }
 
+    @SuppressWarnings({"unchecked", "LoopStatementThatDoesntLoop"})
     @Override
     public <T> Key<T> getValue(E tagName, In<E> in) {
         Objects.requireNonNull(in);
@@ -165,9 +146,6 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
         Collection<Key<?>> returnKeys;
 
         if(!in.isMain()){
-            if(!insideSection) {
-                throw new NotInsideSection("Cannot navigate through sections if insideSection = false");
-            }
             E[] path = in.getPath();
             int x = 0;
             E aliasName = path[0];

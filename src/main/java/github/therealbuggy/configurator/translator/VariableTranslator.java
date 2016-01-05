@@ -23,10 +23,7 @@ import github.therealbuggy.configurator.IConfigurator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by jonathan on 02/01/16.
- */
-public abstract class VariableTranslator<T> extends Translator<T> {
+public abstract class VariableTranslator<T> extends ModifierTranslator<T> {
     VariableTranslator() {
         super();
     }

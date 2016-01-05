@@ -18,25 +18,31 @@
  */
 package github.therealbuggy.configurator.translator;
 
-import com.udojava.evalex.Expression;
 import github.therealbuggy.configurator.IConfigurator;
+import github.therealbuggy.configurator.modifiers.IModifierHandler;
+import github.therealbuggy.configurator.modifiers.ModifierHandlerImpl;
 
-public class IntTranslator extends ExpressionTranslator<Integer> {
 
-    IntTranslator() {
+public abstract class ModifierTranslator<T> extends Translator<T> {
 
+    IModifierHandler<String> modifierHandler = new ModifierHandlerImpl<>();
+
+    ModifierTranslator() {
+        super();
     }
-
-    public IntTranslator(IConfigurator configurator) {
+    ModifierTranslator(IConfigurator configurator) {
         super(configurator);
     }
 
     @Override
-    public Integer valueTranslate(String expressionString) {
-
-        Expression expression = getTranslatedExpression(expressionString);
-        return expression.eval().intValueExact();
+    public T translate(String expression) {
+        String modExpression = modifierHandler.modify(expression);
+        return valueTranslate(modExpression);
     }
 
 
+    @Override
+    public IModifierHandler<String> getIModifierHandler() {
+        return this.modifierHandler;
+    }
 }

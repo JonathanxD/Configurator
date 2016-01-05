@@ -18,9 +18,6 @@
  */
 package github.therealbuggy.configurator.types;
 
-/**
- * Created by jonathan on 01/01/16.
- */
 public class ValueTypes {
     @Deprecated
     public static final Any ANY = new Any();
@@ -55,4 +52,11 @@ public class ValueTypes {
         return new Any(defaultValue);
     }
 
+    public static <T> List<T> ListType() {
+        return new List<>();
+    }
+
+    public static <T> List<T> ListType(java.util.List<T> defaultValue) {
+        return new List<>(defaultValue);
+    }
 }

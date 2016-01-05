@@ -16,27 +16,31 @@
  *     You should have received a copy of the GNU Affero General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package github.therealbuggy.configurator.key;
+package github.therealbuggy.test;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 import github.therealbuggy.configurator.BackEndIConfigurator;
-import github.therealbuggy.configurator.holder.UnknownValueHolder;
-import github.therealbuggy.configurator.holder.ValueHolder;
-import github.therealbuggy.configurator.sections.Section;
-import github.therealbuggy.configurator.translator.Translator;
+import github.therealbuggy.configurator.Configurator;
+import github.therealbuggy.configurator.IConfigurator;
+import github.therealbuggy.configurator.key.Key;
+import github.therealbuggy.configurator.key.KeyUtil;
+import github.therealbuggy.configurator.nav.In;
+import github.therealbuggy.configurator.translator.statics.DefaultTranslators;
 import github.therealbuggy.configurator.types.Type;
+import github.therealbuggy.configurator.types.ValueTypes;
+import github.therealbuggy.configurator.utils.Reflection;
 
-public interface Key<T> {
+public class TestReflection {
 
-    Section section();
-    Type<T> getType();
-    ValueHolder<T> getKnowValue(Translator<T> translator);
-    UnknownValueHolder getValue();
+    public static void main(String[] args) {
+        ArrayList<String> arrayList = new ArrayList<>();
 
-    BackEndIConfigurator getBackEndConfigurator();
-    String getPath();
-    String getName();
-    boolean isMain();
 
-    <E> ValueHolder<E> getValue(Translator<E> translator);
-
+        ArrayList<String> clone = Reflection.tryClone(arrayList);
+        System.out.println("clone == arrayList");
+        System.out.println(clone == arrayList);
+        
+    }
 }

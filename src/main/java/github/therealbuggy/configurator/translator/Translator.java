@@ -20,12 +20,10 @@ package github.therealbuggy.configurator.translator;
 
 import github.therealbuggy.configurator.IConfigurator;
 import github.therealbuggy.configurator.exceptions.CannotGetConfigurator;
+import github.therealbuggy.configurator.modifiers.IModifierHandler;
 
 import java.util.Objects;
 
-/**
- * Created by jonathan on 02/01/16.
- */
 public abstract class Translator<T> {
 
     private IConfigurator configurator;
@@ -52,6 +50,11 @@ public abstract class Translator<T> {
 
     }
 
-    public abstract T translate(String expression);
+    public T translate(String expression){
+        return valueTranslate(expression);
+    }
 
+    protected abstract T valueTranslate(String expression);
+
+    public abstract IModifierHandler getIModifierHandler();
 }

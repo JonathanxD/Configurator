@@ -22,9 +22,6 @@ import github.therealbuggy.configurator.IConfigurator;
 
 import java.util.regex.Matcher;
 
-/**
- * Created by jonathan on 02/01/16.
- */
 public class UniversalTranslator extends VariableTranslator<String> {
 
     UniversalTranslator() {
@@ -36,7 +33,7 @@ public class UniversalTranslator extends VariableTranslator<String> {
     }
 
     @Override
-    public String translate(String expressionString) {
+    public String valueTranslate(String expressionString) {
         Matcher matcher = super.variableMatcher(expressionString);
         String finaL = expressionString;
         while(matcher.find()) {

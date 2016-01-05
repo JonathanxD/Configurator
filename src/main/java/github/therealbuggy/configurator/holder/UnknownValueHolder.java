@@ -18,12 +18,11 @@
  */
 package github.therealbuggy.configurator.holder;
 
+import java.util.List;
+
 import github.therealbuggy.configurator.utils.BooleanUtil;
 import github.therealbuggy.configurator.utils.Reflection;
 
-/**
- * Created by jonathan on 02/01/16.
- */
 public class UnknownValueHolder extends ValueHolder<Object> {
     private static final UnknownValueHolder EMPTY = new UnknownValueHolder(null);
 
@@ -31,6 +30,7 @@ public class UnknownValueHolder extends ValueHolder<Object> {
         super(value);
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T getAs(Class<T> tClass) {
         return (T) getValue();
     }
@@ -159,10 +159,24 @@ public class UnknownValueHolder extends ValueHolder<Object> {
         return getAs(Character.class);
     }
 
+    public List<?> getAsList() {
+        return getAs(List.class);
+    }
+
+    /**
+     * Unsecure way
+     * @param <T> Type
+     * @return Type Known List
+     */
+    @SuppressWarnings("unchecked")
+    public <T> List<T> getAsKnowList() {
+        return (List<T>) getAs(List.class);
+    }
+
     /**
      * Try to translate via reflection using parse* method
-     * @param <T>
-     * @return
+     * @param <T> Type
+     * @return Translated value
      */
     private <T> T translate(Class<T> tClass) {
         return Reflection.tryTranslate(tClass, getValue());

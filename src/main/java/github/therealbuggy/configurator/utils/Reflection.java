@@ -22,19 +22,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-/**
- * Created by jonathan on 02/01/16.
- */
 public class Reflection {
     /**
      * Try to translate via reflection using parse* method
-     * @param <T>
-     * @return
+     * @param <T> Type
+     * @return Translated value
      */
     public static <T> T tryTranslate(Class<T> tClass, Object value) {
         return discovery(tClass, value, tClass.getDeclaredMethods());
     }
 
+    @SuppressWarnings("unchecked")
     private static <T> T discovery(Class<T> tClass, Object value, Method[] methods){
         for(Method method : methods) {
             if(Modifier.isStatic(method.getModifiers())) {
@@ -56,5 +54,19 @@ public class Reflection {
         }
 
         return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T tryClone(T objectToClone){
+        Class<?> classToClone = objectToClone.getClass();
+        try {
+            Method method = classToClone.getMethod("clone");
+            if(Modifier.isPublic(method.getModifiers())) {
+                return (T) method.invoke(objectToClone);
+            }
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
+        }
+
+        return objectToClone;
     }
 }

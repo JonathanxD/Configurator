@@ -25,30 +25,29 @@ import github.therealbuggy.configurator.sections.Section;
 import github.therealbuggy.configurator.translator.Translator;
 import github.therealbuggy.configurator.types.Type;
 
-/**
- * Created by jonathan on 02/01/16.
- */
 public class KeyImpl<T> implements Key<T> {
     private static final Key EMPTY = new KeyImpl<>();
 
+    private final String name;
     private final String path;
     private final Section section;
     private final Type<T> type;
     private final BackEndIConfigurator iConfigurator;
 
     private KeyImpl() {
-        this(null, null, null, null);
+        this(null, null, null, null, null);
     }
 
     public KeyImpl(String path, Type<T> type) {
-        this(path, null, type, null);
+        this(null, path, null, type, null);
     }
 
     public KeyImpl(String path, Section section, Type<T> type) {
-        this(path, section, type, null);
+        this(null, path, section, type, null);
     }
 
-    public KeyImpl(String path, Section section, Type<T> type, BackEndIConfigurator configurator) {
+    public KeyImpl(String name, String path, Section section, Type<T> type, BackEndIConfigurator configurator) {
+        this.name = name;
         this.path = path;
         this.section = section;
         this.type = type;
@@ -95,6 +94,12 @@ public class KeyImpl<T> implements Key<T> {
         return this.section == null;
     }
 
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @SuppressWarnings("unchecked")
     public static <T> Key<T> empty() {
         return EMPTY;
     }
