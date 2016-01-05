@@ -41,8 +41,6 @@ public abstract class ExpressionTranslator<T> extends VariableTranslator<T> {
 
         String resultExpression = translator.translate(expressionString);
 
-        Expression expression = new Expression(resultExpression);
-
-        return expression;
+        return new Expression(resultExpression);
     }
 }

@@ -18,21 +18,21 @@
  */
 package github.therealbuggy.configurator.nav;
 
-import java.lang.reflect.Array;
-
 /**
  * Created by jonathan on 02/01/16.
  */
 public class In<T> {
-    @Deprecated
-    public static final In MAIN = new In();
+    @SuppressWarnings("unchecked")
+    private static final In MAIN = new In();
 
     private final T[] path;
 
+    @SafeVarargs
     In(T... path){
         this.path = path;
     }
 
+    @SafeVarargs
     public static <T> In<T> path(T... path){
         return new In<>(path);
     }
@@ -58,6 +58,7 @@ public class In<T> {
         return this == MAIN || path.length == 0;
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> In<T> main() {
         return MAIN;
     }

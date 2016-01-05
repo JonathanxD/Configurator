@@ -19,7 +19,6 @@
 package github.therealbuggy.configurator;
 
 
-import java.util.Collection;
 import java.util.Map;
 
 import github.therealbuggy.configurator.types.Type;
@@ -31,7 +30,7 @@ public interface BackEndIConfigurator {
 
     /**
      * Define new value
-     * @param path
+     * @param path Path to value
      */
     void setValueToPath(String path, Type<?> valueType);
 

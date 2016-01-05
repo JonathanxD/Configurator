@@ -55,8 +55,7 @@ public class TypeBuilder<T> {
             return null;
         }
 
-        Type<T> type = (Type<T>) construct;
-        return type;
+        return (Type<T>) construct;
     }
 
     public TypeBuilder<T> setValue(T defaultValue) {

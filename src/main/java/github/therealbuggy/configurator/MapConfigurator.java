@@ -18,7 +18,6 @@
  */
 package github.therealbuggy.configurator;
 
-import github.therealbuggy.configurator.exceptions.NotInsideSection;
 import github.therealbuggy.configurator.holder.UnknownValueHolder;
 import github.therealbuggy.configurator.holder.ValueHolder;
 import github.therealbuggy.configurator.key.Key;
@@ -106,7 +105,7 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
         return this.tagSection(tagName, section, type, superSection);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "SuspiciousToArrayCall"})
     @Override
     public <T> Key<T> getSection(In<E> in) {
         LinkedList<E> linkedList = new LinkedList<>(Arrays.asList(in.getPath()));

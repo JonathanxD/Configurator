@@ -18,15 +18,12 @@
  */
 package github.therealbuggy.test;
 
-import java.util.Collection;
 import java.util.Map;
 
 import github.therealbuggy.configurator.BackEndIConfigurator;
 import github.therealbuggy.configurator.Configurator;
 import github.therealbuggy.configurator.IConfigurator;
-import github.therealbuggy.configurator.MapConfigurator;
 import github.therealbuggy.configurator.key.Key;
-import github.therealbuggy.configurator.key.KeyUtil;
 import github.therealbuggy.configurator.nav.In;
 import github.therealbuggy.configurator.translator.statics.DefaultTranslators;
 import github.therealbuggy.configurator.types.Type;
