@@ -20,6 +20,7 @@ package github.therealbuggy.configurator;
 
 import java.util.Collection;
 
+import github.therealbuggy.configurator.argument.Arguments;
 import github.therealbuggy.configurator.holder.UnknownValueHolder;
 import github.therealbuggy.configurator.holder.ValueHolder;
 import github.therealbuggy.configurator.key.Key;
@@ -38,16 +39,21 @@ public interface IConfigurator<E> {
     Key<?> setSectionAlias(E aliasObject, String section);
     <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type);
     <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type, Translator<?> valueTranslator);
+    <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type, Translator<?> valueTranslator, Arguments arguments);
     <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type, In<E> superSection);
     <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type, In<E> superSection, Translator<?> valueTranslator);
+    <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type, In<E> superSection, Translator<?> valueTranslator, Arguments arguments);
     Key<?> setSectionAlias(E aliasObject, String section, In<E> superSection);
     <T> Key<T> setSectionAlias(E aliasObject, String section, In<E> superSection, Type<T> type);
     <T> Key<T> setSectionAlias(E aliasObject, String section, In<E> superSection, Type<T> type, Translator<?> valueTranslator);
+    <T> Key<T> setSectionAlias(E aliasObject, String section, In<E> superSection, Type<T> type, Translator<?> valueTranslator, Arguments arguments);
 
     Key<?> setKeyAlias(E aliasObject, String section);
     Key<?> setKeyAlias(E aliasObject, String section, Translator<?> valueTranslator);
+    Key<?> setKeyAlias(E aliasObject, String section, Translator<?> valueTranslator, Arguments arguments);
     Key<?> setKeyAlias(E aliasObject, String section, In<E> superSection);
     Key<?> setKeyAlias(E aliasObject, String section, In<E> superSection, Translator<?> valueTranslator);
+    Key<?> setKeyAlias(E aliasObject, String section, In<E> superSection, Translator<?> valueTranslator, Arguments arguments);
 
     <T> Key<T> getSection(In<E> in);
 

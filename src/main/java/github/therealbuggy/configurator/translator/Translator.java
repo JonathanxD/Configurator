@@ -20,7 +20,6 @@ package github.therealbuggy.configurator.translator;
 
 import github.therealbuggy.configurator.IConfigurator;
 import github.therealbuggy.configurator.exceptions.CannotGetConfigurator;
-import github.therealbuggy.configurator.modifiers.ArgumentBuilder;
 import github.therealbuggy.configurator.modifiers.IModifierHandler;
 
 import java.util.Objects;
@@ -28,7 +27,6 @@ import java.util.Objects;
 public abstract class Translator<T> {
 
     private IConfigurator configurator;
-    private ArgumentBuilder argumentBuilder = null;
 
     Translator() {
         this.configurator = null;
@@ -50,19 +48,6 @@ public abstract class Translator<T> {
             throw new CannotGetConfigurator("Cannot get configurator! Defined? The configurator need be defined in constructor or calling setConfigurator method!");
         }
 
-    }
-
-    public synchronized final Translator<T> argument(ArgumentBuilder argumentBuilder) {
-        this.argumentBuilder = argumentBuilder;
-        return this;
-    }
-
-    synchronized ArgumentBuilder getArgumentBuilder() {
-        return argumentBuilder;
-    }
-
-    synchronized boolean isArgumentPresent() {
-        return argumentBuilder != null;
     }
 
     public T translate(String expression){

@@ -19,7 +19,6 @@
 package github.therealbuggy.configurator.translator;
 
 import github.therealbuggy.configurator.IConfigurator;
-import github.therealbuggy.configurator.modifiers.ArgumentBuilder;
 import github.therealbuggy.configurator.modifiers.IModifierHandler;
 
 
@@ -38,9 +37,10 @@ public abstract class ModifierTranslator<T> extends Translator<T> {
     public T translate(String expression) {
         IModifierHandler<String> modifierHandler = getConfigurator().getModifierHandler();
         String modExpression = modifierHandler.modify(expression);
+        /*
         if(isArgumentPresent()) {
             modExpression = getArgumentBuilder().build(modExpression);
-        }
+        }*/
         return valueTranslate(modExpression);
     }
 

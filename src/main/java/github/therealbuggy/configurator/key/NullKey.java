@@ -18,6 +18,8 @@
  */
 package github.therealbuggy.configurator.key;
 
+import github.therealbuggy.configurator.argument.SpecificArgument;
+import github.therealbuggy.configurator.exceptions.CannotApply;
 import github.therealbuggy.configurator.exceptions.CannotGetValue;
 import github.therealbuggy.configurator.holder.UnknownValueHolder;
 import github.therealbuggy.configurator.holder.ValueHolder;
@@ -51,5 +53,30 @@ public abstract class NullKey implements Key {
     @Override
     public Translator<?> getValueTranslator() {
         throw new CannotGetValue("Cannot getValueTranslator of a NullKey (or Section)");
+    }
+
+    @Override
+    public Object getExactValue() {
+        throw new CannotGetValue("Cannot getExactValue of a NullKey (or Section)");
+    }
+
+    @Override
+    public String getPlainValue() {
+        throw new CannotGetValue("Cannot getPlainValue of a NullKey (or Section)");
+    }
+
+    @Override
+    public Object applyOrderedArgument(Object... inputs) {
+        throw new CannotApply("Cannot applyOrderedArgument in a NullKey (or Section)");
+    }
+
+    @Override
+    public Object applySpecificArgument(SpecificArgument specificArgument) {
+        throw new CannotApply("Cannot applyOrderedArgument in a NullKey (or Section)");
+    }
+
+    @Override
+    public Object applyTypedArgument(Object... inputs) {
+        throw new CannotApply("Cannot applyOrderedArgument in a NullKey (or Section)");
     }
 }

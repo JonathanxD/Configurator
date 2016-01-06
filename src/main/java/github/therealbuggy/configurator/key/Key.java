@@ -19,6 +19,8 @@
 package github.therealbuggy.configurator.key;
 
 import github.therealbuggy.configurator.BackEndIConfigurator;
+import github.therealbuggy.configurator.argument.Arguments;
+import github.therealbuggy.configurator.argument.SpecificArgument;
 import github.therealbuggy.configurator.holder.UnknownValueHolder;
 import github.therealbuggy.configurator.holder.ValueHolder;
 import github.therealbuggy.configurator.sections.Section;
@@ -29,10 +31,21 @@ public interface Key<T> {
 
     Section section();
     Type<T> getType();
+    @Deprecated
     ValueHolder<T> getKnowValue();
+
     UnknownValueHolder getUnknownValue();
 
-    Translator<?> getValueTranslator();
+    @Deprecated
+    Translator<T> getValueTranslator();
+
+    T getExactValue();
+
+    String getPlainValue();
+
+    T applyOrderedArgument(Object... inputs);
+    T applyTypedArgument(Object... inputs);
+    T applySpecificArgument(SpecificArgument specificArgument);
 
     BackEndIConfigurator getBackEndConfigurator();
     String getPath();

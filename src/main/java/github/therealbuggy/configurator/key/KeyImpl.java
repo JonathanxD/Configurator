@@ -19,6 +19,9 @@
 package github.therealbuggy.configurator.key;
 
 import github.therealbuggy.configurator.BackEndIConfigurator;
+import github.therealbuggy.configurator.argument.Arguments;
+import github.therealbuggy.configurator.argument.SpecificArgument;
+import github.therealbuggy.configurator.exceptions.CannotApply;
 import github.therealbuggy.configurator.exceptions.CannotFindPath;
 import github.therealbuggy.configurator.holder.UnknownValueHolder;
 import github.therealbuggy.configurator.holder.ValueHolder;
@@ -33,19 +36,21 @@ public class KeyImpl<T> implements Key<T> {
     private final String path;
     private final Section section;
     private final Type<T> type;
-    private final Translator<?> valueTranslator;
+    private final Translator<T> valueTranslator;
+    private final Arguments arguments;
     private final BackEndIConfigurator iConfigurator;
 
     private KeyImpl() {
-        this(null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null);
     }
 
-    public KeyImpl(String name, String path, Section section, Type<T> type, Translator<?> valueTranslator, BackEndIConfigurator configurator) {
+    public KeyImpl(String name, String path, Section section, Type<T> type, Translator<T> valueTranslator, Arguments arguments, BackEndIConfigurator configurator) {
         this.name = name;
         this.path = path;
         this.section = section;
         this.type = type;
         this.valueTranslator = valueTranslator;
+        this.arguments = arguments;
         this.iConfigurator = configurator;
     }
 
@@ -65,7 +70,7 @@ public class KeyImpl<T> implements Key<T> {
         if(!this.iConfigurator.valueExists(getPath())){
             throw new CannotFindPath(getPath());
         }
-        return (ValueHolder<T>) new ValueHolder<>(valueTranslator.translate(this.iConfigurator.getValueFromPathAsString(getPath())));
+        return new ValueHolder<>(valueTranslator.translate(getPlainValue()));
     }
 
     @SuppressWarnings("unchecked")
@@ -74,7 +79,7 @@ public class KeyImpl<T> implements Key<T> {
         if(!this.iConfigurator.valueExists(getPath())){
             throw new CannotFindPath(getPath());
         }
-        return (ValueHolder<E>) new ValueHolder<>(valueTranslator.translate(this.iConfigurator.getValueFromPathAsString(getPath())));
+        return (ValueHolder<E>) new ValueHolder<>(valueTranslator.translate(getPlainValue()));
     }
 
     @Override
@@ -115,7 +120,42 @@ public class KeyImpl<T> implements Key<T> {
     }
 
     @Override
-    public Translator<?> getValueTranslator() {
+    public Translator<T> getValueTranslator() {
         return valueTranslator;
     }
+
+    @Override
+    public T getExactValue() {
+        return valueTranslator.translate(getPlainValue());
+    }
+
+    @Override
+    public String getPlainValue() {
+        return this.iConfigurator.getValueFromPathAsString(getPath());
+    }
+
+    @Override
+    public T applyOrderedArgument(Object... inputs) {
+        if(arguments == null) {
+            throw new CannotApply("Cannot apply arguments to non-specified arguments");
+        }
+        return valueTranslator.translate(arguments.apply(getPlainValue()).applyOrdered(inputs));
+    }
+
+    @Override
+    public T applyTypedArgument(Object... inputs) {
+        if(arguments == null) {
+            throw new CannotApply("Cannot apply arguments to non-specified arguments");
+        }
+        return valueTranslator.translate(arguments.apply(getPlainValue()).applyTyped(inputs));
+    }
+
+    @Override
+    public T applySpecificArgument(SpecificArgument specificArgument) {
+        if(arguments == null) {
+            throw new CannotApply("Cannot apply arguments to non-specified arguments");
+        }
+        return valueTranslator.translate(arguments.apply(getPlainValue()).applySpecific(specificArgument));
+    }
+
 }

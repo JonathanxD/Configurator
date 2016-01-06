@@ -18,6 +18,7 @@
  */
 package github.therealbuggy.configurator;
 
+import github.therealbuggy.configurator.argument.Arguments;
 import github.therealbuggy.configurator.holder.UnknownValueHolder;
 import github.therealbuggy.configurator.holder.ValueHolder;
 import github.therealbuggy.configurator.key.Key;
@@ -49,66 +50,91 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
 
     @Override
     public Key<?> setSectionAlias(E aliasObject, String section) {
-        return this.set(aliasObject, section, null, In.<E>main(), null);
+        return this.set(aliasObject, section, null, In.<E>main(), null, null);
     }
 
     @Override
     public <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type) {
-        return this.set(aliasObject, section, type, In.<E>main(), new UniversalTranslator(this));
+        return this.set(aliasObject, section, type, In.<E>main(), new UniversalTranslator(this), null);
     }
 
     @Override
     public <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type, Translator<?> valueTranslator) {
-        return this.set(aliasObject, section, type, In.<E>main(), valueTranslator);
+        return this.set(aliasObject, section, type, In.<E>main(), valueTranslator, null);
+    }
+
+    @Override
+    public <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type, Translator<?> valueTranslator, Arguments arguments) {
+        return this.set(aliasObject, section, type, In.<E>main(), valueTranslator, arguments);
     }
 
     @Override
     public <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type, In<E> superSection) {
-        return this.set(aliasObject, section, type, In.<E>main(), new UniversalTranslator(this));
+        return this.set(aliasObject, section, type, In.<E>main(), new UniversalTranslator(this), null);
     }
 
     @Override
     public <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type, In<E> superSection, Translator<?> valueTranslator) {
-        return this.set(aliasObject, section, type, superSection, valueTranslator);
+        return this.set(aliasObject, section, type, superSection, valueTranslator, null);
+    }
+
+    @Override
+    public <T> Key<T> setSectionAlias(E aliasObject, String section, Type<T> type, In<E> superSection, Translator<?> valueTranslator, Arguments arguments) {
+        return this.set(aliasObject, section, type, superSection, valueTranslator, arguments);
     }
 
     @Override
     public Key<?> setSectionAlias(E aliasObject, String section, In<E> superSection) {
-        return this.setSectionAlias(aliasObject, section, null, superSection, null);
+        return this.setSectionAlias(aliasObject, section, null, superSection, null, null);
     }
 
     @Override
     public <T> Key<T> setSectionAlias(E aliasObject, String section, In<E> superSection, Type<T> type) {
-        return this.setSectionAlias(aliasObject, section, type, superSection, new UniversalTranslator(this));
+        return this.setSectionAlias(aliasObject, section, type, superSection, new UniversalTranslator(this), null);
     }
 
     @Override
     public <T> Key<T> setSectionAlias(E aliasObject, String section, In<E> superSection, Type<T> type, Translator<?> valueTranslator) {
-        return this.set(aliasObject, section, type, superSection, valueTranslator);
+        return this.set(aliasObject, section, type, superSection, valueTranslator, null);
+    }
+
+    @Override
+    public <T> Key<T> setSectionAlias(E aliasObject, String section, In<E> superSection, Type<T> type, Translator<?> valueTranslator, Arguments arguments) {
+        return this.set(aliasObject, section, type, superSection, valueTranslator, arguments);
     }
 
     @Override
     public Key<?> setKeyAlias(E aliasObject, String section) {
-        return this.set(aliasObject, section, ValueTypes.AnyType(), In.<E>main(), new UniversalTranslator(this));
+        return this.set(aliasObject, section, ValueTypes.AnyType(), In.<E>main(), new UniversalTranslator(this), null);
     }
 
     @Override
     public Key<?> setKeyAlias(E aliasObject, String section, Translator<?> valueTranslator) {
-        return this.set(aliasObject, section, ValueTypes.AnyType(), In.<E>main(), valueTranslator);
+        return this.set(aliasObject, section, ValueTypes.AnyType(), In.<E>main(), valueTranslator, null);
     }
 
     @Override
     public Key<?> setKeyAlias(E aliasObject, String section, In<E> superSection) {
-        return this.set(aliasObject, section, ValueTypes.AnyType(), superSection, new UniversalTranslator(this));
+        return this.set(aliasObject, section, ValueTypes.AnyType(), superSection, new UniversalTranslator(this), null);
     }
 
     @Override
     public Key<?> setKeyAlias(E aliasObject, String section, In<E> superSection, Translator<?> valueTranslator) {
-        return this.set(aliasObject, section, ValueTypes.AnyType(), superSection, valueTranslator);
+        return this.set(aliasObject, section, ValueTypes.AnyType(), superSection, valueTranslator, null);
+    }
+
+    @Override
+    public Key<?> setKeyAlias(E aliasObject, String section, In<E> superSection, Translator<?> valueTranslator, Arguments arguments) {
+        return this.set(aliasObject, section, ValueTypes.AnyType(), superSection, valueTranslator, arguments);
+    }
+
+    @Override
+    public Key<?> setKeyAlias(E aliasObject, String section, Translator<?> valueTranslator, Arguments arguments) {
+        return this.set(aliasObject, section, ValueTypes.AnyType(), In.<E>main(), valueTranslator, arguments);
     }
 
     @SuppressWarnings("unchecked")
-    private <T> Key<T> set(E aliasObject, String section, Type<T> type, In<E> superSection, Translator<?> valueTranslator) {
+    private <T> Key<T> set(E aliasObject, String section, Type<T> type, In<E> superSection, Translator<?> valueTranslator, Arguments arguments) {
         Section supSection = null;
         if(superSection != null){
             Key<?> key = null;
@@ -129,7 +155,7 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
 
             String path = (supSection != null ? supSection.getPath() + "." + section : section);
 
-            Key<T> key = new KeyImpl<>(section, path, supSection, type, valueTranslator, this.backEndIConfigurator);
+            Key<T> key = new KeyImpl<>(section, path, supSection, type, (Translator<T>) valueTranslator, arguments, this.backEndIConfigurator);
             if(!backEndIConfigurator.valueExists(key.getPath())) {
                 backEndIConfigurator.setValueToPath(key.getPath(), type);
             }
