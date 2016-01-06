@@ -109,7 +109,6 @@ public class Arguments {
             String inputClone = Reflection.tryClone(input);
 
             Map<String, Class<?>> mapSpecific = specificArgument.getArgumentMap();
-
             for(Map.Entry<String, Class<?>> entry : argMap.entrySet()) {
                 Iterator<Map.Entry<String, Class<?>>> mapSpecificEntries = mapSpecific.entrySet().iterator();
 
