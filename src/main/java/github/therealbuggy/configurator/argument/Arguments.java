@@ -105,6 +105,7 @@ public class Arguments {
         }
 
         public final String applySpecific(SpecificArgument specificArgument){
+            if(argMap.size() != specificArgument.getArgumentMap().size()) throw new NotEnoughArgumentsToApply("Cannot apply two different arrays size!");
             String inputClone = Reflection.tryClone(input);
 
             Map<String, Class<?>> mapSpecific = specificArgument.getArgumentMap();
@@ -115,9 +116,10 @@ public class Arguments {
                 while(mapSpecificEntries.hasNext()){
                     Map.Entry<String, Class<?>> next = mapSpecificEntries.next();
 
-                    if(next.getKey().equals(entry.getKey()) && next.getValue() == entry.getValue()){
+                    if(next.getValue() == entry.getValue()){
                         inputClone = inputClone.replaceAll(entry.getKey(), String.valueOf(next.getKey()));
                         mapSpecificEntries.remove();
+                        break;
                     }
                 }
             }
