@@ -65,7 +65,7 @@ public class LocaleList<T>  {
         localeSet.add(modifier);
     }
 
-    public void remnoveLocale(ILocale<T> modifier) {
+    public void removeLocale(ILocale<T> modifier) {
         localeSet.remove(modifier);
     }
 }
