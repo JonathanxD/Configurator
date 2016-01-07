@@ -18,6 +18,7 @@
  */
 package github.therealbuggy.configurator.utils;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -68,5 +69,15 @@ public class Reflection {
         }
 
         return objectToClone;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T findStaticField(Class<?> classToFind, String fieldName) {
+        try {
+            Field field = classToFind.getDeclaredField(fieldName);
+            return (T) field.get(null);
+        } catch (Exception ignored) {
+            return null;
+        }
     }
 }
