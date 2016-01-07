@@ -200,6 +200,10 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
         return KeyImpl.empty();
     }
 
+    public BackEndIConfigurator getBackEndIConfigurator() {
+        return backEndIConfigurator;
+    }
+
     @Override
     public Collection<Key<?>> getValues(In<E> in) {
         return getFiltering(in, new KeyFilter<E>());
