@@ -25,8 +25,9 @@ public class ValueTypes {
     public static final Int INT = new Int();
 
     public static final TypeBuilder<Integer> INT_TYPE = new TypeBuilder<>(Int.class);
-    public static final TypeBuilder<Integer> ANY_TYPE = new TypeBuilder<>(Any.class);
-    public static final TypeBuilder<Integer> BOOL_TYPE = new TypeBuilder<>(Bool.class);
+    public static final TypeBuilder<Object> ANY_TYPE = new TypeBuilder<>(Any.class);
+    public static final TypeBuilder<Boolean> BOOL_TYPE = new TypeBuilder<>(Bool.class);
+    public static final TypeBuilder<String> STR_TYPE = new TypeBuilder<>(Str.class);
 
     public static Int IntType() {
         return new Int();
@@ -59,4 +60,13 @@ public class ValueTypes {
     public static <T> List<T> ListType(java.util.List<T> defaultValue) {
         return new List<>(defaultValue);
     }
+
+    public static Str StrType() {
+        return new Str();
+    }
+
+    public static Str StrType(String defaultValue) {
+        return new Str(defaultValue);
+    }
+
 }

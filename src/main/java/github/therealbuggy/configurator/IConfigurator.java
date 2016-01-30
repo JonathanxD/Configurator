@@ -66,4 +66,6 @@ public interface IConfigurator<E> {
     <T> ValueHolder<T> internal__getValueFromPath(String pathName, Translator<T> translator);
 
     IModifierHandler<String> getModifierHandler();
+
+    BackEndIConfigurator getBackEndIConfigurator();
 }

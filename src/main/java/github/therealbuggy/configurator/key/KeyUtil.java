@@ -39,4 +39,5 @@ public class KeyUtil {
     public static <T> boolean isEmptyKey(Key<T> key) {
         return key.equals(KeyImpl.empty());
     }
+
 }

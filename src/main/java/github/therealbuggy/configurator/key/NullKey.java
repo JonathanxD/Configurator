@@ -29,19 +29,19 @@ import github.therealbuggy.configurator.types.Type;
 /**
  * Created by jonathan on 02/01/16.
  */
-public abstract class NullKey implements Key {
+public abstract class NullKey<T> implements Key<T> {
     @Override
-    public Type getType() {
+    public Type<T> getType() {
         throw new CannotGetValue("Cannot getType of a NullKey (or Section)");
     }
 
     @Override
-    public ValueHolder getKnowValue() {
+    public ValueHolder<T> getKnowValue() {
         throw new CannotGetValue("Cannot getKnowValue of a NullKey (or Section)");
     }
 
     @Override
-    public ValueHolder getValue() {
+    public <E> ValueHolder<E> getValue() {
         throw new CannotGetValue("Cannot getValue of a NullKey (or Section)");
     }
 
@@ -51,12 +51,12 @@ public abstract class NullKey implements Key {
     }
 
     @Override
-    public Translator<?> getValueTranslator() {
+    public Translator<T> getValueTranslator() {
         throw new CannotGetValue("Cannot getValueTranslator of a NullKey (or Section)");
     }
 
     @Override
-    public Object getExactValue() {
+    public T getExactValue() {
         throw new CannotGetValue("Cannot getExactValue of a NullKey (or Section)");
     }
 
@@ -66,17 +66,17 @@ public abstract class NullKey implements Key {
     }
 
     @Override
-    public Object applyOrderedArgument(Object... inputs) {
+    public T applyOrderedArgument(Object... inputs) {
         throw new CannotApply("Cannot applyOrderedArgument in a NullKey (or Section)");
     }
 
     @Override
-    public Object applySpecificArgument(SpecificArgument specificArgument) {
+    public T applySpecificArgument(SpecificArgument specificArgument) {
         throw new CannotApply("Cannot applyOrderedArgument in a NullKey (or Section)");
     }
 
     @Override
-    public Object applyTypedArgument(Object... inputs) {
+    public T applyTypedArgument(Object... inputs) {
         throw new CannotApply("Cannot applyOrderedArgument in a NullKey (or Section)");
     }
 }

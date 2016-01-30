@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * Created by jonathan on 02/01/16.
  */
-abstract class SectionNullKeyImpl<E> extends NullKey{
+abstract class SectionNullKeyImpl<E> extends NullKey<E> {
     private final Map<E, Key<?>> keys = new HashMap<>();
     private final Section section;
     private final BackEndIConfigurator iConfigurator;

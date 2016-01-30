@@ -20,7 +20,7 @@ package github.therealbuggy.configurator.sections;
 
 import github.therealbuggy.configurator.BackEndIConfigurator;
 
-public class Section<E> extends SectionNullKeyImpl {
+public class Section<E> extends SectionNullKeyImpl<E> {
     private final String name;
     private final Section superSection;
 
