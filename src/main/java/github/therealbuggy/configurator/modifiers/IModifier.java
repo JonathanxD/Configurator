@@ -18,6 +18,7 @@
  */
 package github.therealbuggy.configurator.modifiers;
 
+import github.therealbuggy.configurator.locale.ILocale;
 import github.therealbuggy.configurator.locale.LocaleList;
 
 public interface IModifier<T> {
@@ -25,4 +26,6 @@ public interface IModifier<T> {
     T modify(T value);
 
     LocaleList<T> getLocale();
+
+    ILocale<T, ?> getDefaultLocale();
 }

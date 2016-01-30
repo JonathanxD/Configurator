@@ -20,6 +20,7 @@ package github.therealbuggy.test;
 
 import java.awt.*;
 
+import github.therealbuggy.configurator.locale.ILocale;
 import github.therealbuggy.configurator.modifiers.IModifier;
 import github.therealbuggy.configurator.locale.LocaleList;
 
@@ -44,5 +45,10 @@ public class ColorModifier implements IModifier<String> {
     @Override
     public LocaleList<String> getLocale() {
         return locale;
+    }
+
+    @Override
+    public ILocale<String, ?> getDefaultLocale() {
+        return null;
     }
 }
