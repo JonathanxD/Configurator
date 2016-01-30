@@ -19,10 +19,12 @@
 package github.therealbuggy.configurator.locale;
 
 /**
- * Created by jonathan on 05/01/16.
+ * Created by jonathan on 30/01/16.
  */
-public interface ILocale<T, ID> {
+public class LocaleHelper {
 
-    ID getIdOf(T value);
-    T translate(ID id);
+    public static <T, ID> T translate(ILocale<T, ID> locale, T value) {
+        return locale.translate(locale.getIdOf(value));
+    }
+
 }

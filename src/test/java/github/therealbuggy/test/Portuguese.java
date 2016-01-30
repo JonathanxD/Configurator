@@ -23,10 +23,23 @@ import github.therealbuggy.configurator.locale.ILocale;
 /**
  * Created by jonathan on 05/01/16.
  */
-public class Portuguese implements ILocale<String> {
+public class Portuguese implements ILocale<String, Portuguese.ID> {
+
+    public enum ID {
+        DARK_BLUE
+    }
+
     @Override
-    public String translate(String value) {
+    public ID getIdOf(String value) {
         if(value.equalsIgnoreCase("%DARK_BLUE%|%DBLUE%")){
+            return ID.DARK_BLUE;
+        }
+        return null;
+    }
+
+    @Override
+    public String translate(ID id) {
+        if(id.equals(ID.DARK_BLUE)) {
             return "%AZUL_ESCURO%|%AZULE%";
         }
         return null;

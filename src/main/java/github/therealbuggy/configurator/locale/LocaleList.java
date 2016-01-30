@@ -30,7 +30,7 @@ import github.therealbuggy.configurator.utils.Reflection;
 
 public class LocaleList<T>  {
 
-    private final Set<ILocale<T>> localeSet = new HashSet<>();
+    private final Set<ILocale<T, ?>> localeSet = new HashSet<>();
 
     @SuppressWarnings("unchecked")
     public T translate(T valueToModify) {
@@ -47,8 +47,8 @@ public class LocaleList<T>  {
 
         T valueClone = Reflection.tryClone(valueToModify);
         for(T value : values){
-            for(ILocale<T> modifier : localeSet) {
-                T tmp = modifier.translate(value);
+            for(ILocale<T, ?> modifier : localeSet) {
+                T tmp = LocaleHelper.translate(modifier, value);
                 if(tmp != null) {
                     valueClone = tmp;
                 }
@@ -57,15 +57,15 @@ public class LocaleList<T>  {
         return valueClone;
     }
 
-    public Collection<ILocale<T>> getLocales() {
+    public Collection<ILocale<T, ?>> getLocales() {
         return Collections.unmodifiableSet(localeSet);
     }
 
-    public void addLocale(ILocale<T> modifier) {
+    public void addLocale(ILocale<T, ?> modifier) {
         localeSet.add(modifier);
     }
 
-    public void removeLocale(ILocale<T> modifier) {
+    public void removeLocale(ILocale<T, ?> modifier) {
         localeSet.remove(modifier);
     }
 }
