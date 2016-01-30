@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import github.therealbuggy.configurator.locale.LocaleHelper;
 import github.therealbuggy.configurator.utils.Reflection;
 
 public class ModifierHandlerImpl<T> implements IModifierHandler<T> {
@@ -35,7 +36,13 @@ public class ModifierHandlerImpl<T> implements IModifierHandler<T> {
         // Auto translate
 
         for(IModifier<T> modifier : modifierSet) {
-            T tmp = modifier.getLocale().translate(valueToModify);
+            T tmp = valueToModify;
+
+            if(modifier.getDefaultLocale() != null) {
+                tmp = LocaleHelper.translate(modifier.getDefaultLocale(), tmp);
+            }
+
+            tmp = modifier.getLocale().translate(tmp);
             if(tmp != null){
                 valueClone = tmp;
             }
