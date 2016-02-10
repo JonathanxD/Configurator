@@ -31,6 +31,9 @@ import github.therealbuggy.configurator.modifiers.IModifierHandler;
 import github.therealbuggy.configurator.modifiers.ModifierHandlerImpl;
 import github.therealbuggy.configurator.nav.In;
 import github.therealbuggy.configurator.sections.Section;
+import github.therealbuggy.configurator.transformer.ITransformerHandler;
+import github.therealbuggy.configurator.transformer.TransformedObject;
+import github.therealbuggy.configurator.transformer.TransformerHandlerImpl;
 import github.therealbuggy.configurator.translator.Translator;
 import github.therealbuggy.configurator.translator.UniversalTranslator;
 import github.therealbuggy.configurator.types.Type;
@@ -42,6 +45,7 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
     private final Map<E, Key<?>> sectionsAndKeys = new HashMap<>();
     private final BackEndIConfigurator backEndIConfigurator;
     private final IModifierHandler<String> modifierHandler = new ModifierHandlerImpl<>();
+    private final ITransformerHandler transformerHandler = new TransformerHandlerImpl();
 
 
     MapConfigurator(BackEndIConfigurator backEndIConfigurator) {
@@ -178,6 +182,13 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
         }
     }
 
+    @Override
+    public <T> Optional<TransformedObject<T>> getTransformedSection(In<E> in) {
+        Key<T> section = getSection(in);
+
+        return transformerHandler.transform(section);
+    }
+
     @SuppressWarnings({"unchecked", "SuspiciousToArrayCall"})
     @Override
     public <T> Key<T> getSection(In<E> in) {
@@ -273,6 +284,11 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
         return new ValueHolder<>(translator.translate(String.valueOf(backEndIConfigurator.getValueFromPath(pathName))));
     }
 
+
+    @Override
+    public ITransformerHandler getTransformerHandler() {
+        return transformerHandler;
+    }
 
     @Override
     public IModifierHandler<String> getModifierHandler() {

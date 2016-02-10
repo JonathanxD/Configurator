@@ -19,6 +19,7 @@
 package github.therealbuggy.configurator;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import github.therealbuggy.configurator.argument.Arguments;
 import github.therealbuggy.configurator.holder.UnknownValueHolder;
@@ -27,6 +28,8 @@ import github.therealbuggy.configurator.key.Key;
 import github.therealbuggy.configurator.modifiers.IModifierHandler;
 import github.therealbuggy.configurator.modifiers.ModifierHandlerImpl;
 import github.therealbuggy.configurator.nav.In;
+import github.therealbuggy.configurator.transformer.ITransformerHandler;
+import github.therealbuggy.configurator.transformer.TransformedObject;
 import github.therealbuggy.configurator.translator.Translator;
 import github.therealbuggy.configurator.types.Type;
 
@@ -57,6 +60,8 @@ public interface IConfigurator<E> {
 
     <T> Key<T> getSection(In<E> in);
 
+    <T> Optional<TransformedObject<T>> getTransformedSection(In<E> in);
+
     <T> Key<T> getValue(E aliasObject, In<E> in);
 
     Collection<Key<?>> getValues(In<E> in);
@@ -65,6 +70,7 @@ public interface IConfigurator<E> {
     UnknownValueHolder internal__getValueFromPath(String pathName);
     <T> ValueHolder<T> internal__getValueFromPath(String pathName, Translator<T> translator);
 
+    ITransformerHandler getTransformerHandler();
     IModifierHandler<String> getModifierHandler();
 
     BackEndIConfigurator getBackEndIConfigurator();
