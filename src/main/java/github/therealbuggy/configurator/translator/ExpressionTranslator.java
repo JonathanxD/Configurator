@@ -31,7 +31,7 @@ public abstract class ExpressionTranslator<T> extends VariableTranslator<T> {
         super();
     }
 
-    ExpressionTranslator(IConfigurator configurator) {
+    public ExpressionTranslator(IConfigurator configurator) {
         super(configurator);
     }
 

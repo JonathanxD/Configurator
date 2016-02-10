@@ -28,7 +28,7 @@ public abstract class ModifierTranslator<T> extends Translator<T> {
     ModifierTranslator() {
         super();
     }
-    ModifierTranslator(IConfigurator configurator) {
+    public ModifierTranslator(IConfigurator configurator) {
         super(configurator);
     }
 

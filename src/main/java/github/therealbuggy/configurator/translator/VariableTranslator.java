@@ -18,20 +18,21 @@
  */
 package github.therealbuggy.configurator.translator;
 
-import github.therealbuggy.configurator.IConfigurator;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import github.therealbuggy.configurator.IConfigurator;
 
 public abstract class VariableTranslator<T> extends ModifierTranslator<T> {
     VariableTranslator() {
         super();
     }
-    VariableTranslator(IConfigurator configurator) {
+
+    public VariableTranslator(IConfigurator configurator) {
         super(configurator);
     }
 
-    public final Matcher variableMatcher(String expressionToMatch){
+    public final Matcher variableMatcher(String expressionToMatch) {
         Pattern pattern = Pattern.compile("(\\(\\$(.+)\\))");
         return pattern.matcher(expressionToMatch);
     }
