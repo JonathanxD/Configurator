@@ -43,6 +43,19 @@ public class LocaleList<T, ID> {
         return (ID) translateType(valueToModify, Type.ID);
     }
 
+    public T translateFromId(ID id) {
+        T value = null;
+
+        for (ILocale<T, ID> modifier : localeSet) {
+
+            T tmp = modifier.translate(id);
+            if (tmp != null)
+                value = tmp;
+
+        }
+        return value;
+    }
+
     @SuppressWarnings("unchecked")
     public Object translateType(T valueToModify, Type type) {
         List<T> values = Collections.singletonList(valueToModify);
@@ -74,7 +87,7 @@ public class LocaleList<T, ID> {
             }
         }
 
-        if(type == Type.VALUE) {
+        if (type == Type.VALUE) {
             return valueClone;
         } else {
             return id;
