@@ -18,11 +18,11 @@
  */
 package github.therealbuggy.configurator.transformer;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import github.therealbuggy.configurator.IConfigurator;
 import github.therealbuggy.configurator.key.Key;
@@ -32,7 +32,7 @@ import github.therealbuggy.configurator.key.Key;
  */
 public class TransformerHandlerImpl implements ITransformerHandler {
 
-    private final Set<Transformer<?>> transformers = new HashSet<>();
+    private final List<Transformer<?>> transformers = new ArrayList<>();
     private final IConfigurator<?> configurator;
 
     public TransformerHandlerImpl(IConfigurator<?> configurator) {
@@ -54,6 +54,7 @@ public class TransformerHandlerImpl implements ITransformerHandler {
 
                 }
             } catch (Exception ignored) {
+                ignored.printStackTrace();
             }
 
         }
@@ -69,11 +70,12 @@ public class TransformerHandlerImpl implements ITransformerHandler {
         for (Transformer transformer : transformers) {
             try {
 
-                if(!transformer.canConstruct(value))
+                if (!transformer.canConstruct(value))
                     continue;
 
                 transformer.constructSection(section, value, configurator);
             } catch (Exception ignored) {
+                ignored.printStackTrace();
             }
 
         }
@@ -81,12 +83,13 @@ public class TransformerHandlerImpl implements ITransformerHandler {
 
     @Override
     public Collection<Transformer<?>> getTransformers() {
-        return Collections.unmodifiableSet(transformers);
+        return Collections.unmodifiableList(transformers);
     }
 
     @Override
     public void addTransformer(Transformer<?> transformer) {
-        transformers.add(transformer);
+        if(!transformers.contains(transformer))
+            transformers.add(transformer);
     }
 
     @Override

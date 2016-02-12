@@ -22,15 +22,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import github.therealbuggy.configurator.utils.Reflection;
 
 public class LocaleList<T, ID> {
 
-    private final Set<ILocale<T, ID>> localeSet = new HashSet<>();
+    private final List<ILocale<T, ID>> localeList = new ArrayList<>();
 
 
     @SuppressWarnings("unchecked")
@@ -46,7 +44,7 @@ public class LocaleList<T, ID> {
     public T translateFromId(ID id) {
         T value = null;
 
-        for (ILocale<T, ID> modifier : localeSet) {
+        for (ILocale<T, ID> modifier : localeList) {
 
             T tmp = modifier.translate(id);
             if (tmp != null)
@@ -73,7 +71,7 @@ public class LocaleList<T, ID> {
         ID id = null;
 
         for (T value : values) {
-            for (ILocale<T, ID> modifier : localeSet) {
+            for (ILocale<T, ID> modifier : localeList) {
 
                 T tmp0 = LocaleHelper.retTranslate(modifier, value);
                 if (tmp0 != null) {
@@ -95,15 +93,16 @@ public class LocaleList<T, ID> {
     }
 
     public Collection<ILocale<T, ID>> getLocales() {
-        return Collections.unmodifiableSet(localeSet);
+        return Collections.unmodifiableList(localeList);
     }
 
     public void addLocale(ILocale<T, ID> modifier) {
-        localeSet.add(modifier);
+        if (!localeList.contains(modifier))
+            localeList.add(modifier);
     }
 
     public void removeLocale(ILocale<T, ID> modifier) {
-        localeSet.remove(modifier);
+        localeList.remove(modifier);
     }
 
     enum Type {

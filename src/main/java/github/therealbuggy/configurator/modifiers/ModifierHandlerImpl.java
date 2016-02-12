@@ -18,36 +18,36 @@
  */
 package github.therealbuggy.configurator.modifiers;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import github.therealbuggy.configurator.locale.LocaleHelper;
 import github.therealbuggy.configurator.utils.Reflection;
 
 public class ModifierHandlerImpl<T> implements IModifierHandler<T> {
 
-    private final Set<IModifier<T, ?>> modifierSet = new HashSet<>();
+    private final List<IModifier<T, ?>> modifierList = new ArrayList<>();
 
     @Override
     public T modify(T valueToModify) {
         T valueClone = Reflection.tryClone(valueToModify);
         // Auto translate
 
-        for(IModifier<T, ?> modifier : modifierSet) {
+        for (IModifier<T, ?> modifier : modifierList) {
             T tmp = valueToModify;
 
-            if(modifier.getDefaultLocale() != null) {
+            if (modifier.getDefaultLocale() != null) {
                 tmp = LocaleHelper.retTranslate(modifier.getDefaultLocale(), tmp);
             }
 
             tmp = modifier.getLocale().translate(tmp);
-            if(tmp != null){
+            if (tmp != null) {
                 valueClone = tmp;
             }
             tmp = modifier.modify(valueClone);
-            if(tmp != null){
+            if (tmp != null) {
                 valueClone = tmp;
             }
 
@@ -57,16 +57,17 @@ public class ModifierHandlerImpl<T> implements IModifierHandler<T> {
 
     @Override
     public Collection<IModifier<T, ?>> getModifiers() {
-        return Collections.unmodifiableSet(modifierSet);
+        return Collections.unmodifiableList(modifierList);
     }
 
     @Override
     public void addModifier(IModifier<T, ?> modifier) {
-        modifierSet.add(modifier);
+        if(!modifierList.contains(modifier))
+            modifierList.add(modifier);
     }
 
     @Override
     public void removeModifier(IModifier modifier) {
-        modifierSet.remove(modifier);
+        modifierList.remove(modifier);
     }
 }
