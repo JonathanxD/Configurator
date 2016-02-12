@@ -16,24 +16,18 @@
  *     You should have received a copy of the GNU Affero General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package github.therealbuggy.configurator.transformer;
-
-import java.util.Optional;
-
-import github.therealbuggy.configurator.IConfigurator;
-import github.therealbuggy.configurator.key.Key;
-import github.therealbuggy.configurator.transformer.exception.TransformException;
+package github.therealbuggy.configurator.transformer.exception;
 
 /**
- * Created by jonathan on 04/01/16.
+ * Created by jonathan on 12/02/16.
  */
-public interface Transformer<T> {
+public class TransformException extends Exception {
 
-    Optional<T> transformSection(Key<?> section, IConfigurator<?> configurator) throws TransformException;
+    public TransformException(String message) {
+        super(message);
+    }
 
-    void constructSection(Key<?> section, T value, IConfigurator<?> configurator) throws TransformException;
-
-    boolean canConstruct(Object value);
-
-
+    public TransformException(String message, Throwable throwable) {
+        super(message, throwable);
+    }
 }

@@ -26,6 +26,7 @@ import java.util.Optional;
 
 import github.therealbuggy.configurator.IConfigurator;
 import github.therealbuggy.configurator.key.Key;
+import github.therealbuggy.configurator.transformer.exception.TransformException;
 
 /**
  * Created by jonathan on 10/02/16.
@@ -53,8 +54,9 @@ public class TransformerHandlerImpl implements ITransformerHandler {
                     return Optional.of(new TransformedObject<>(transform.get(), transformerClass));
 
                 }
-            } catch (Exception ignored) {
-                ignored.printStackTrace();
+            } catch (Exception ex) {
+                if(ex instanceof TransformException)
+                    ex.printStackTrace();
             }
 
         }
@@ -74,8 +76,10 @@ public class TransformerHandlerImpl implements ITransformerHandler {
                     continue;
 
                 transformer.constructSection(section, value, configurator);
-            } catch (Exception ignored) {
-                ignored.printStackTrace();
+            } catch (Exception ex) {
+                if(ex instanceof TransformException)
+                    ex.printStackTrace();
+
             }
 
         }
