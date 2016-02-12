@@ -69,7 +69,7 @@ public class TransformerHandlerImpl implements ITransformerHandler {
         for (Transformer transformer : transformers) {
             try {
 
-                if(!transformer.canConstruct(value.getClass()))
+                if(!transformer.canConstruct(value))
                     continue;
 
                 transformer.constructSection(section, value, configurator);

@@ -32,7 +32,7 @@ public interface Transformer<T> {
 
     void constructSection(Key<?> section, T value, IConfigurator<?> configurator);
 
-    boolean canConstruct(Class<?> valueClass);
+    boolean canConstruct(Object value);
 
 
 }
