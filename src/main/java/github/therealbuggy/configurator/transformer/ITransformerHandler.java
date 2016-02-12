@@ -21,6 +21,7 @@ package github.therealbuggy.configurator.transformer;
 import java.util.Collection;
 import java.util.Optional;
 
+import github.therealbuggy.configurator.IConfigurator;
 import github.therealbuggy.configurator.key.Key;
 
 /**
@@ -29,6 +30,7 @@ import github.therealbuggy.configurator.key.Key;
 public interface ITransformerHandler {
 
     <T> Optional<TransformedObject<T>> transform(Key<?> sectionToTransform);
+    void construct(Key<?> section, Object value);
 
     Collection<Transformer<?>> getTransformers();
 

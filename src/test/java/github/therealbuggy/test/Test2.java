@@ -72,6 +72,11 @@ public class Test2 {
             public Map<String, Object> getSectionsOnPath(String path) {
                 return null;
             }
+
+            @Override
+            public Map<String, Object> getAllOnPath(String path) {
+                return null;
+            }
         }){
 
         };

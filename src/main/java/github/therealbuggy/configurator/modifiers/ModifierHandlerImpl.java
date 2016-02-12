@@ -28,18 +28,18 @@ import github.therealbuggy.configurator.utils.Reflection;
 
 public class ModifierHandlerImpl<T> implements IModifierHandler<T> {
 
-    private final Set<IModifier<T>> modifierSet = new HashSet<>();
+    private final Set<IModifier<T, ?>> modifierSet = new HashSet<>();
 
     @Override
     public T modify(T valueToModify) {
         T valueClone = Reflection.tryClone(valueToModify);
         // Auto translate
 
-        for(IModifier<T> modifier : modifierSet) {
+        for(IModifier<T, ?> modifier : modifierSet) {
             T tmp = valueToModify;
 
             if(modifier.getDefaultLocale() != null) {
-                tmp = LocaleHelper.translate(modifier.getDefaultLocale(), tmp);
+                tmp = LocaleHelper.retTranslate(modifier.getDefaultLocale(), tmp);
             }
 
             tmp = modifier.getLocale().translate(tmp);
@@ -56,12 +56,12 @@ public class ModifierHandlerImpl<T> implements IModifierHandler<T> {
     }
 
     @Override
-    public Collection<IModifier<T>> getModifiers() {
+    public Collection<IModifier<T, ?>> getModifiers() {
         return Collections.unmodifiableSet(modifierSet);
     }
 
     @Override
-    public void addModifier(IModifier<T> modifier) {
+    public void addModifier(IModifier<T, ?> modifier) {
         modifierSet.add(modifier);
     }
 

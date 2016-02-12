@@ -18,11 +18,22 @@
  */
 package github.therealbuggy.configurator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+
 import github.therealbuggy.configurator.argument.Arguments;
 import github.therealbuggy.configurator.holder.UnknownValueHolder;
 import github.therealbuggy.configurator.holder.ValueHolder;
 import github.therealbuggy.configurator.key.Key;
 import github.therealbuggy.configurator.key.KeyImpl;
+import github.therealbuggy.configurator.mapconfigurator.filter.ApproverFilter;
 import github.therealbuggy.configurator.mapconfigurator.filter.ExtraFilter;
 import github.therealbuggy.configurator.mapconfigurator.filter.KeyFilter;
 import github.therealbuggy.configurator.mapconfigurator.filter.OnlyExtraFilter;
@@ -39,13 +50,11 @@ import github.therealbuggy.configurator.translator.UniversalTranslator;
 import github.therealbuggy.configurator.types.Type;
 import github.therealbuggy.configurator.types.ValueTypes;
 
-import java.util.*;
-
-public abstract class MapConfigurator<E> implements IConfigurator<E>{
+public abstract class MapConfigurator<E> implements IConfigurator<E> {
     private final Map<E, Key<?>> sectionsAndKeys = new HashMap<>();
     private final BackEndIConfigurator backEndIConfigurator;
     private final IModifierHandler<String> modifierHandler = new ModifierHandlerImpl<>();
-    private final ITransformerHandler transformerHandler = new TransformerHandlerImpl();
+    private final ITransformerHandler transformerHandler = new TransformerHandlerImpl(this);
 
 
     MapConfigurator(BackEndIConfigurator backEndIConfigurator) {
@@ -140,41 +149,41 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
     @SuppressWarnings("unchecked")
     private <T> Key<T> set(E aliasObject, String section, Type<T> type, In<E> superSection, Translator<?> valueTranslator, Arguments arguments) {
         Section supSection = null;
-        if(superSection != null){
+        if (superSection != null) {
             Key<?> key = null;
-            if(!superSection.isMain()){
+            if (!superSection.isMain()) {
                 key = getSection(superSection);
             }
-            if(key != null){
-                if(key instanceof Section) {
+            if (key != null) {
+                if (key instanceof Section) {
                     supSection = (Section) key;
                 }
             }
         }
 
-        if(type != null){
-            if(valueTranslator == null) {
+        if (type != null) {
+            if (valueTranslator == null) {
                 valueTranslator = new UniversalTranslator(this);
             }
 
             String path = (supSection != null ? supSection.getPath() + "." + section : section);
 
             Key<T> key = new KeyImpl<>(section, path, supSection, type, (Translator<T>) valueTranslator, arguments, this.backEndIConfigurator);
-            if(!backEndIConfigurator.valueExists(key.getPath())) {
+            if (!backEndIConfigurator.valueExists(key.getPath())) {
                 backEndIConfigurator.setValueToPath(key.getPath(), type);
             }
-            if(supSection != null){
+            if (supSection != null) {
                 supSection.setKey(aliasObject, key);
-            }else{
+            } else {
                 sectionsAndKeys.put(aliasObject, key);
             }
             return key;
         } else {
             Section sectionInstance = new Section(section, supSection, this.backEndIConfigurator);
 
-            if(supSection != null){
+            if (supSection != null) {
                 supSection.setKey(aliasObject, sectionInstance);
-            }else{
+            } else {
                 sectionsAndKeys.put(aliasObject, sectionInstance);
             }
 
@@ -187,6 +196,11 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
         Key<T> section = getSection(in);
 
         return transformerHandler.transform(section);
+    }
+
+    @Override
+    public <T> void constructSection(Key<?> section, T value) {
+        transformerHandler.construct(section, value);
     }
 
     @SuppressWarnings({"unchecked", "SuspiciousToArrayCall"})
@@ -204,7 +218,7 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
         Objects.requireNonNull(in);
         Collection<Key<?>> keys = getFiltering(in, new OnlyExtraFilter<>(aliasObject));
 
-        for(Key<?> key : keys){
+        for (Key<?> key : keys) {
             return (Key<T>) key;
         }
 
@@ -227,46 +241,70 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
         return getFiltering(in, new SectionFilter<E>());
     }
 
+    @Override
+    public boolean containsAlias(E alias) {
+        return sectionsAndKeys.containsKey(alias);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> Key<T> getAny(In<E> in) {
+        Objects.requireNonNull(in);
+        Collection<Key<?>> keys = getFiltering(in, new ApproverFilter<E>());
+
+        for (Key<?> key : keys) {
+            return (Key<T>) key;
+        }
+
+        return KeyImpl.empty();
+    }
+
+
+    @Override
+    public <T> boolean keyExists(Key<T> key) {
+        return sectionsAndKeys.containsKey(key);
+    }
+
     @SuppressWarnings("unchecked")
     private Collection<Key<?>> getFiltering(In<E> in, ExtraFilter<E, Key<?>> filter) {
         Objects.requireNonNull(in);
         Map<E, Key<?>> map = null;
         Collection<Key<?>> returnKeys;
 
-        if(!in.isMain()){
+        if (!in.isMain()) {
             E[] path = in.getPath();
             int x = 0;
             E aliasName = path[0];
             Section sec;
-            if(sectionsAndKeys.containsKey(aliasName)) {
+            if (sectionsAndKeys.containsKey(aliasName)) {
                 Key<?> checkKey = sectionsAndKeys.get(aliasName);
 
-                if(checkKey instanceof Section) {
+                if (checkKey instanceof Section) {
                     sec = (Section) checkKey;
-                }else {
+                } else {
                     return Collections.emptyList();
                 }
 
-                while(x + 1 < path.length){
+                while (x + 1 < path.length) {
                     ++x;
                     aliasName = path[x];
-                    if(sec.containsKey(aliasName) && (checkKey = sec.getKey(aliasName)) instanceof Section){
+                    if (sec.containsKey(aliasName) && (checkKey = sec.getKey(aliasName)) instanceof Section) {
                         sec = (Section) checkKey;
-                    }else{
+                    } else {
                         return Collections.emptyList();
                     }
                 }
 
                 map = (Map<E, Key<?>>) sec.getKeys();
             }
-        }else{
+        } else {
             map = sectionsAndKeys;
         }
-        if(map != null){
+        if (map != null) {
             returnKeys = new ArrayList<>();
-            for(Map.Entry<?, Key<?>> entry : map.entrySet()){
-                if(filter.filter((E) entry.getKey(), entry.getValue())) {
-                   returnKeys.add(entry.getValue());
+            for (Map.Entry<?, Key<?>> entry : map.entrySet()) {
+                if (filter.filter((E) entry.getKey(), entry.getValue())) {
+                    returnKeys.add(entry.getValue());
                 }
             }
             return returnKeys;
@@ -294,4 +332,5 @@ public abstract class MapConfigurator<E> implements IConfigurator<E>{
     public IModifierHandler<String> getModifierHandler() {
         return modifierHandler;
     }
+
 }

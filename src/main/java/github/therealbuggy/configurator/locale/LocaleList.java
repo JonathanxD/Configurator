@@ -28,17 +28,28 @@ import java.util.Set;
 
 import github.therealbuggy.configurator.utils.Reflection;
 
-public class LocaleList<T>  {
+public class LocaleList<T, ID> {
 
-    private final Set<ILocale<T, ?>> localeSet = new HashSet<>();
+    private final Set<ILocale<T, ID>> localeSet = new HashSet<>();
+
 
     @SuppressWarnings("unchecked")
     public T translate(T valueToModify) {
+        return (T) translateType(valueToModify, Type.VALUE);
+    }
+
+    @SuppressWarnings("unchecked")
+    public ID translateId(T valueToModify) {
+        return (ID) translateType(valueToModify, Type.ID);
+    }
+
+    @SuppressWarnings("unchecked")
+    public Object translateType(T valueToModify, Type type) {
         List<T> values = Collections.singletonList(valueToModify);
 
-        if(valueToModify instanceof String) {
+        if (valueToModify instanceof String) {
             String stringValueToModify = (String) valueToModify;
-            if(stringValueToModify.contains("|")) {
+            if (stringValueToModify.contains("|")) {
                 String[] vals = stringValueToModify.split("\\|");
                 values.clear();
                 values = new ArrayList<>((Collection<? extends T>) Arrays.asList(vals));
@@ -46,26 +57,44 @@ public class LocaleList<T>  {
         }
 
         T valueClone = Reflection.tryClone(valueToModify);
-        for(T value : values){
-            for(ILocale<T, ?> modifier : localeSet) {
-                T tmp = LocaleHelper.translate(modifier, value);
-                if(tmp != null) {
-                    valueClone = tmp;
+        ID id = null;
+
+        for (T value : values) {
+            for (ILocale<T, ID> modifier : localeSet) {
+
+                T tmp0 = LocaleHelper.retTranslate(modifier, value);
+                if (tmp0 != null) {
+                    valueClone = tmp0;
+                }
+
+                ID tmp = LocaleHelper.getID(modifier, value);
+                if (tmp != null) {
+                    id = tmp;
                 }
             }
         }
-        return valueClone;
+
+        if(type == Type.VALUE) {
+            return valueClone;
+        } else {
+            return id;
+        }
     }
 
-    public Collection<ILocale<T, ?>> getLocales() {
+    public Collection<ILocale<T, ID>> getLocales() {
         return Collections.unmodifiableSet(localeSet);
     }
 
-    public void addLocale(ILocale<T, ?> modifier) {
+    public void addLocale(ILocale<T, ID> modifier) {
         localeSet.add(modifier);
     }
 
-    public void removeLocale(ILocale<T, ?> modifier) {
+    public void removeLocale(ILocale<T, ID> modifier) {
         localeSet.remove(modifier);
+    }
+
+    enum Type {
+        ID,
+        VALUE
     }
 }

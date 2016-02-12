@@ -27,11 +27,11 @@ import github.therealbuggy.configurator.locale.LocaleList;
 /**
  * Sample color modifier
  */
-public class ColorModifier implements IModifier<String> {
+public class ColorModifier implements IModifier<String, String> {
 
-    private final LocaleList<String> locale;
+    private final LocaleList<String, String> locale;
 
-    ColorModifier(LocaleList<String> locale){
+    ColorModifier(LocaleList<String, String> locale){
         this.locale = locale;
     }
 
@@ -43,12 +43,12 @@ public class ColorModifier implements IModifier<String> {
     }
 
     @Override
-    public LocaleList<String> getLocale() {
+    public LocaleList<String, String> getLocale() {
         return locale;
     }
 
     @Override
-    public ILocale<String, ?> getDefaultLocale() {
+    public ILocale<String, String> getDefaultLocale() {
         return null;
     }
 }

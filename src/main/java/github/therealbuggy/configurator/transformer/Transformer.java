@@ -20,6 +20,7 @@ package github.therealbuggy.configurator.transformer;
 
 import java.util.Optional;
 
+import github.therealbuggy.configurator.IConfigurator;
 import github.therealbuggy.configurator.key.Key;
 
 /**
@@ -27,8 +28,11 @@ import github.therealbuggy.configurator.key.Key;
  */
 public interface Transformer<T> {
 
-    Optional<T> transformSection(Key<?> section);
+    Optional<T> transformSection(Key<?> section, IConfigurator<?> configurator);
 
+    void constructSection(Key<?> section, T value, IConfigurator<?> configurator);
+
+    boolean canConstruct(Class<?> valueClass);
 
 
 }

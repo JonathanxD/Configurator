@@ -23,8 +23,16 @@ package github.therealbuggy.configurator.locale;
  */
 public class LocaleHelper {
 
-    public static <T, ID> T translate(ILocale<T, ID> locale, T value) {
+    public static <T, ID> T retTranslate(ILocale<T, ID> locale, T value) {
         return locale.translate(locale.getIdOf(value));
+    }
+
+    public static <T, ID> ID getID(ILocale<T, ID> locale, T value) {
+        return locale.getIdOf(value);
+    }
+
+    public static <T, ID> T translateId(ILocale<T, ID> locale, ID value) {
+        return locale.translate(value);
     }
 
 }

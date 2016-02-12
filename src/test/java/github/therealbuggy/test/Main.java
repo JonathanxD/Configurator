@@ -37,8 +37,8 @@ public class Main {
 
             @Override
             public Object getValueFromPath(String path) {
-                System.out.println("Tentou obter do path: "+path);
-                if(path.equals("in.an")){
+                System.out.println("Tentou obter do path: " + path);
+                if (path.equals("in.an")) {
                     return 7;
                 }
                 return "($in.an)*4";
@@ -50,13 +50,13 @@ public class Main {
             }
 
             @Override
-            public Map<String ,Object> getValuesOnPath(String path) {
+            public Map<String, Object> getValuesOnPath(String path) {
                 return null;
             }
 
             @Override
             public void setValueToPath(String path, Type<?> valueType) {
-                System.out.println("Setting value: "+valueType+" to path "+path);
+                System.out.println("Setting value: " + valueType + " to path " + path);
             }
 
             @Override
@@ -68,7 +68,12 @@ public class Main {
             public Map<String, Object> getSectionsOnPath(String path) {
                 return null;
             }
-        }){
+
+            @Override
+            public Map<String, Object> getAllOnPath(String path) {
+                return null;
+            }
+        }) {
 
         };
 
@@ -84,10 +89,10 @@ public class Main {
 
         Key<?> key = configurator.getValue("TIME", In.path("PRINCIPAL", "INTERVALO"));
 
-        if(!KeyUtil.isEmptyKey(key)){
+        if (!KeyUtil.isEmptyKey(key)) {
             System.out.println(key.getValue());
             System.out.println(key.getValue().getValue());
         }
-        
+
     }
 }

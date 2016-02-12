@@ -16,16 +16,21 @@
  *     You should have received a copy of the GNU Affero General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package github.therealbuggy.configurator.modifiers;
+package github.therealbuggy.configurator.mapconfigurator.filter;
 
-import github.therealbuggy.configurator.locale.ILocale;
-import github.therealbuggy.configurator.locale.LocaleList;
+import github.therealbuggy.configurator.key.Key;
 
-public interface IModifier<T, LOCALE_ID> {
+/**
+ * Created by jonathan on 11/02/16.
+ */
+public class ApproverFilter<E> implements ExtraFilter<E, Key<?>> {
+    @Override
+    public boolean filter(E extraValue, Key<?> value) {
+        return extraValue != null ? true : false;
+    }
 
-    T modify(T value);
-
-    LocaleList<T, LOCALE_ID> getLocale();
-
-    ILocale<T, LOCALE_ID> getDefaultLocale();
+    @Override
+    public boolean filter(Key<?> value) {
+        return true;
+    }
 }

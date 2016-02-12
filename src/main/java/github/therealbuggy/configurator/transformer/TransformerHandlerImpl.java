@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import github.therealbuggy.configurator.IConfigurator;
 import github.therealbuggy.configurator.key.Key;
 
 /**
@@ -32,6 +33,11 @@ import github.therealbuggy.configurator.key.Key;
 public class TransformerHandlerImpl implements ITransformerHandler {
 
     private final Set<Transformer<?>> transformers = new HashSet<>();
+    private final IConfigurator<?> configurator;
+
+    public TransformerHandlerImpl(IConfigurator<?> configurator) {
+        this.configurator = configurator;
+    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -39,7 +45,8 @@ public class TransformerHandlerImpl implements ITransformerHandler {
 
         for (Transformer<?> transformer : transformers) {
             try {
-                Optional<T> transform = (Optional<T>) transformer.transformSection(sectionToTransform);
+
+                Optional<T> transform = (Optional<T>) transformer.transformSection(sectionToTransform, configurator);
                 if (transform.isPresent()) {
 
                     Class<? extends Transformer> transformerClass = transformer.getClass();
@@ -52,6 +59,24 @@ public class TransformerHandlerImpl implements ITransformerHandler {
         }
 
         return Optional.empty();
+    }
+
+    // TODO: Multi Process
+    @SuppressWarnings("unchecked")
+    @Override
+    public void construct(Key<?> section, Object value) {
+
+        for (Transformer transformer : transformers) {
+            try {
+
+                if(!transformer.canConstruct(value.getClass()))
+                    continue;
+
+                transformer.constructSection(section, value, configurator);
+            } catch (Exception ignored) {
+            }
+
+        }
     }
 
     @Override

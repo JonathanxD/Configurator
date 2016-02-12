@@ -23,6 +23,18 @@ package github.therealbuggy.configurator.locale;
  */
 public interface ILocale<T, ID> {
 
+    /**
+     * Translate from Locale String (ex: english string) to ID
+     * @param value
+     * @return
+     */
     ID getIdOf(T value);
+
+    /**
+     * Translate from ID, to Locale String
+     * @param id
+     * @return
+     */
+
     T translate(ID id);
 }

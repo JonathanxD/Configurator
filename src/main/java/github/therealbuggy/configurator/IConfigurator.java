@@ -59,8 +59,12 @@ public interface IConfigurator<E> {
     Key<?> setKeyAlias(E aliasObject, String section, In<E> superSection, Translator<?> valueTranslator, Arguments arguments);
 
     <T> Key<T> getSection(In<E> in);
+    <T> Key<T> getAny(In<E> in);
+    <T> boolean keyExists(Key<T> key);
+    boolean containsAlias(E alias);
 
     <T> Optional<TransformedObject<T>> getTransformedSection(In<E> in);
+    <T> void constructSection(Key<?> section, T value);
 
     <T> Key<T> getValue(E aliasObject, In<E> in);
 

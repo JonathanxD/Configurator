@@ -30,6 +30,7 @@ public interface BackEndIConfigurator {
 
     /**
      * Define new value
+     *
      * @param path Path to value
      */
     void setValueToPath(String path, Type<?> valueType);
@@ -38,6 +39,7 @@ public interface BackEndIConfigurator {
 
     /**
      * Get value in the PATH
+     *
      * @param path Path to value
      * @return Value
      */
@@ -45,6 +47,7 @@ public interface BackEndIConfigurator {
 
     /**
      * Get value IN Path as {@link String}
+     *
      * @param path Path to value
      * @return The value as {@link String}
      */
@@ -52,6 +55,7 @@ public interface BackEndIConfigurator {
 
     /**
      * Get all values in determinate path
+     *
      * @param path Path to values
      * @return Values
      */
@@ -59,9 +63,18 @@ public interface BackEndIConfigurator {
 
     /**
      * Get all paths of sections in determinate path
+     *
      * @param path Path to Sections
      * @return Sections path
      */
     Map<String, Object> getSectionsOnPath(String path);
+
+    /**
+     * Get all keys and sections in determinate path
+     *
+     * @param path Path of keys and sections
+     * @return Keys and Sections paths and values
+     */
+    Map<String, Object> getAllOnPath(String path);
 
 }

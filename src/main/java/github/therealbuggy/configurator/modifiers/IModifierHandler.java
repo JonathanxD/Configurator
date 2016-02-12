@@ -24,8 +24,8 @@ public interface IModifierHandler<T> {
 
     T modify(T valueToModify);
 
-    Collection<IModifier<T>> getModifiers();
-    void addModifier(IModifier<T> modifier);
-    void removeModifier(IModifier<T> modifier);
+    Collection<IModifier<T, ?>> getModifiers();
+    void addModifier(IModifier<T, ?> modifier);
+    void removeModifier(IModifier<T, ?> modifier);
 
 }
