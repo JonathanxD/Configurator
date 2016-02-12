@@ -73,6 +73,11 @@ public class Main {
             public Map<String, Object> getAllOnPath(String path) {
                 return null;
             }
+
+            @Override
+            public void save() {
+
+            }
         }) {
 
         };

@@ -77,4 +77,8 @@ public interface BackEndIConfigurator {
      */
     Map<String, Object> getAllOnPath(String path);
 
+    /**
+     * Save changes!
+     */
+    void save();
 }
