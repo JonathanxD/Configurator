@@ -21,6 +21,7 @@ package github.therealbuggy.configurator;
 
 import java.util.Map;
 
+import github.therealbuggy.configurator.data.ExtraData;
 import github.therealbuggy.configurator.types.Type;
 
 /**
@@ -35,7 +36,13 @@ public interface BackEndIConfigurator {
      */
     void setValueToPath(String path, Type<?> valueType);
 
-    boolean valueExists(String path);
+    /**
+     * Check if a path exists
+     *
+     * @param path Path
+     * @return True if path exists.
+     */
+    boolean pathExists(String path);
 
     /**
      * Get value in the PATH
@@ -76,6 +83,15 @@ public interface BackEndIConfigurator {
      * @return Keys and Sections paths and values
      */
     Map<String, Object> getAllOnPath(String path);
+
+    /**
+     * Return instance of {@link ExtraData} to register/get Data
+     *
+     * @return {@link ExtraData} instance (not a new ExtraData)
+     * @see AbstractBackEnd#extraData
+     * @since 13/02/2016 - 02:00 (GMT-2)
+     */
+    ExtraData extraData();
 
     /**
      * Save changes!

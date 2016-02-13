@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven">
-  <info organisation="github.therealbuggy" module="Configurator" revision="1.0" status="integration" publication="20160212014207">
+  <info organisation="github.therealbuggy" module="Configurator" revision="1.0" status="integration" publication="20160213145117">
     <description/>
   </info>
   <configurations>
@@ -16,5 +16,6 @@
   </publications>
   <dependencies>
     <dependency org="com.udojava" name="EvalEx" rev="1.0" conf="compile-&gt;default"/>
+    <dependency org="" name="annotations-java8" rev="" conf="compile-&gt;default"/>
   </dependencies>
 </ivy-module>

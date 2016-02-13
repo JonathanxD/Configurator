@@ -21,7 +21,11 @@ package github.therealbuggy.configurator.transformer.exception;
 /**
  * Created by jonathan on 12/02/16.
  */
-public class TransformException extends Exception {
+
+/**
+ * {@link github.therealbuggy.configurator.transformer.ITransformerHandler} only handles this exception type
+ */
+public class TransformException extends Throwable {
 
     public TransformException(String message) {
         super(message);

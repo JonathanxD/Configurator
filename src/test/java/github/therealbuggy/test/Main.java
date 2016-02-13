@@ -18,8 +18,10 @@
  */
 package github.therealbuggy.test;
 
+import java.util.List;
 import java.util.Map;
 
+import github.therealbuggy.configurator.AbstractBackEnd;
 import github.therealbuggy.configurator.BackEndIConfigurator;
 import github.therealbuggy.configurator.Configurator;
 import github.therealbuggy.configurator.IConfigurator;
@@ -29,11 +31,12 @@ import github.therealbuggy.configurator.nav.In;
 import github.therealbuggy.configurator.translator.statics.DefaultTranslators;
 import github.therealbuggy.configurator.types.Type;
 import github.therealbuggy.configurator.types.ValueTypes;
+import github.therealbuggy.configurator.utils.Reference;
 
 public class Main {
 
     public static void main(String[] args) {
-        IConfigurator<String> configurator = new Configurator<String>(new BackEndIConfigurator() {
+        IConfigurator<String> configurator = new Configurator<String>(new AbstractBackEnd() {
 
             @Override
             public Object getValueFromPath(String path) {
@@ -60,7 +63,7 @@ public class Main {
             }
 
             @Override
-            public boolean valueExists(String path) {
+            public boolean pathExists(String path) {
                 return true;
             }
 
@@ -98,6 +101,9 @@ public class Main {
             System.out.println(key.getValue());
             System.out.println(key.getValue().getValue());
         }
+
+        //configurator.getTransformedSection(In.main());
+        configurator.getTransformedSection(In.main(), Reference.to().a(List.class).of(String.class).build());
 
     }
 }

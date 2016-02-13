@@ -20,7 +20,16 @@ package github.therealbuggy.configurator;
 
 import java.util.Map;
 
+import github.therealbuggy.configurator.data.ExtraData;
+
 public abstract class AbstractBackEnd implements BackEndIConfigurator {
+
+    private final ExtraData extraData = new ExtraData();
+
+    @Override
+    public ExtraData extraData() {
+        return extraData;
+    }
 
     public Map<String, Object> getValuesOnPath() {
         return this.getValuesOnPath(null);
@@ -28,5 +37,9 @@ public abstract class AbstractBackEnd implements BackEndIConfigurator {
 
     public Map<String, Object> getSectionsOnPath() {
         return this.getSectionsOnPath(null);
+    }
+
+    public Map<String, Object> getAllOnPath() {
+        return this.getAllOnPath(null);
     }
 }

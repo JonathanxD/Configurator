@@ -16,26 +16,14 @@
  *     You should have received a copy of the GNU Affero General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package github.therealbuggy.configurator.transformer;
+package github.therealbuggy.configurator.utils;
 
-import java.util.Collection;
-import java.util.Optional;
-
-import github.therealbuggy.configurator.IConfigurator;
-import github.therealbuggy.configurator.key.Key;
-import github.therealbuggy.configurator.utils.Reference;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
- * Created by jonathan on 10/02/16.
+ * Created by jonathan on 13/02/16.
  */
-public interface ITransformerHandler {
-
-    <T> Optional<TransformedObject<T>> transform(Key<?> sectionToTransform, Reference reference);
-    void construct(Key<?> section, Reference reference);
-
-    Collection<Transformer<?>> getTransformers();
-
-    void addTransformer(Transformer<?> transformer);
-
-    void removeTransformer(Transformer<?> transformer);
+@Retention(RetentionPolicy.CLASS)
+public @interface Optional {
 }

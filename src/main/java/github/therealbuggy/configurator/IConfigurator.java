@@ -32,6 +32,7 @@ import github.therealbuggy.configurator.transformer.ITransformerHandler;
 import github.therealbuggy.configurator.transformer.TransformedObject;
 import github.therealbuggy.configurator.translator.Translator;
 import github.therealbuggy.configurator.types.Type;
+import github.therealbuggy.configurator.utils.Reference;
 
 /**
  * Created by jonathan on 01/01/16.
@@ -63,8 +64,8 @@ public interface IConfigurator<E> {
     <T> boolean keyExists(Key<T> key);
     boolean containsAlias(E alias);
 
-    <T> Optional<TransformedObject<T>> getTransformedSection(In<E> in);
-    <T> void constructSection(Key<?> section, T value);
+    <T> Optional<TransformedObject<T>> getTransformedSection(In<E> in, Reference reference);
+    void constructSection(Key<?> section, Reference reference);
 
     <T> Key<T> getValue(E aliasObject, In<E> in);
 

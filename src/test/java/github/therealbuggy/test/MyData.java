@@ -16,26 +16,33 @@
  *     You should have received a copy of the GNU Affero General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package github.therealbuggy.configurator.transformer;
-
-import java.util.Collection;
-import java.util.Optional;
+package github.therealbuggy.test;
 
 import github.therealbuggy.configurator.IConfigurator;
-import github.therealbuggy.configurator.key.Key;
-import github.therealbuggy.configurator.utils.Reference;
 
 /**
- * Created by jonathan on 10/02/16.
+ * Created by jonathan on 13/02/16.
  */
-public interface ITransformerHandler {
+public class MyData {
 
-    <T> Optional<TransformedObject<T>> transform(Key<?> sectionToTransform, Reference reference);
-    void construct(Key<?> section, Reference reference);
+    private final IConfigurator<?> configurator;
+    private final Portuguese portuguese;
 
-    Collection<Transformer<?>> getTransformers();
+    public MyData(IConfigurator<?> configurator, Portuguese portuguese) {
+        this.configurator = configurator;
+        this.portuguese = portuguese;
+    }
 
-    void addTransformer(Transformer<?> transformer);
+    public IConfigurator<?> getConfigurator() {
+        return configurator;
+    }
 
-    void removeTransformer(Transformer<?> transformer);
+    public Portuguese getPortuguese() {
+        return portuguese;
+    }
+
+    @Override
+    public String toString() {
+        return "MyData[configurator: "+getConfigurator()+", portuguese: "+getPortuguese()+"]";
+    }
 }

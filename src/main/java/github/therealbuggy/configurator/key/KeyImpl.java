@@ -67,7 +67,7 @@ public class KeyImpl<T> implements Key<T> {
     @SuppressWarnings("unchecked")
     @Override
     public ValueHolder<T> getKnowValue() {
-        if(!this.iConfigurator.valueExists(getPath())){
+        if(!this.iConfigurator.pathExists(getPath())){
             throw new CannotFindPath(getPath());
         }
         return new ValueHolder<>(valueTranslator.translate(getPlainValue()));
@@ -76,7 +76,7 @@ public class KeyImpl<T> implements Key<T> {
     @SuppressWarnings("unchecked")
     @Override
     public <E> ValueHolder<E> getValue() {
-        if(!this.iConfigurator.valueExists(getPath())){
+        if(!this.iConfigurator.pathExists(getPath())){
             throw new CannotFindPath(getPath());
         }
         return (ValueHolder<E>) new ValueHolder<>(valueTranslator.translate(getPlainValue()));
@@ -84,7 +84,7 @@ public class KeyImpl<T> implements Key<T> {
 
     @Override
     public UnknownValueHolder getUnknownValue() {
-        if(!this.iConfigurator.valueExists(getPath())){
+        if(!this.iConfigurator.pathExists(getPath())){
             throw new CannotFindPath(getPath());
         }
         return new UnknownValueHolder(this.iConfigurator.getValueFromPath(getPath()));

@@ -29,6 +29,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 import github.therealbuggy.configurator.argument.Arguments;
+import github.therealbuggy.configurator.data.DataProvider;
+import github.therealbuggy.configurator.data.ExtraData;
 import github.therealbuggy.configurator.holder.UnknownValueHolder;
 import github.therealbuggy.configurator.holder.ValueHolder;
 import github.therealbuggy.configurator.key.Key;
@@ -49,6 +51,8 @@ import github.therealbuggy.configurator.translator.Translator;
 import github.therealbuggy.configurator.translator.UniversalTranslator;
 import github.therealbuggy.configurator.types.Type;
 import github.therealbuggy.configurator.types.ValueTypes;
+import github.therealbuggy.configurator.utils.Reference;
+import github.therealbuggy.configurator.utils.Reflection;
 
 public abstract class MapConfigurator<E> implements IConfigurator<E> {
     private final Map<E, Key<?>> sectionsAndKeys = new HashMap<>();
@@ -59,6 +63,30 @@ public abstract class MapConfigurator<E> implements IConfigurator<E> {
 
     MapConfigurator(BackEndIConfigurator backEndIConfigurator) {
         this.backEndIConfigurator = backEndIConfigurator;
+
+        ExtraData extraData = this.backEndIConfigurator.extraData();
+
+        DataProvider[] providers = Reflection.getAnnotation(backEndIConfigurator.getClass(), DataProvider.class);
+
+        if (providers.length > 0) {
+            for (DataProvider provider : providers) {
+                for (Class<?> provideClass : provider.value()) {
+                    try {
+                        Object data = extraData.construct(provideClass, this);
+
+                        if (data != null) {
+                            extraData.registerData(data);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }
+
     }
 
     @Override
@@ -169,7 +197,7 @@ public abstract class MapConfigurator<E> implements IConfigurator<E> {
             String path = (supSection != null ? supSection.getPath() + "." + section : section);
 
             Key<T> key = new KeyImpl<>(section, path, supSection, type, (Translator<T>) valueTranslator, arguments, this.backEndIConfigurator);
-            if (!backEndIConfigurator.valueExists(key.getPath())) {
+            if (!backEndIConfigurator.pathExists(key.getPath())) {
                 backEndIConfigurator.setValueToPath(key.getPath(), type);
             }
             if (supSection != null) {
@@ -192,15 +220,16 @@ public abstract class MapConfigurator<E> implements IConfigurator<E> {
     }
 
     @Override
-    public <T> Optional<TransformedObject<T>> getTransformedSection(In<E> in) {
+    public <T> Optional<TransformedObject<T>> getTransformedSection(In<E> in, Reference reference) {
         Key<T> section = getSection(in);
 
-        return transformerHandler.transform(section);
+        return transformerHandler.transform(section, reference);
     }
 
+
     @Override
-    public <T> void constructSection(Key<?> section, T value) {
-        transformerHandler.construct(section, value);
+    public void constructSection(Key<?> section, Reference reference) {
+        transformerHandler.construct(section, reference);
     }
 
     @SuppressWarnings({"unchecked", "SuspiciousToArrayCall"})

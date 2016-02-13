@@ -12,7 +12,7 @@ apply plugin: 'maven'
 
 defaultTasks 'licenseFormat', 'build', 'jar', 'uploadArchives'
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 
 sourceSets {
     main {
@@ -41,6 +41,7 @@ repositories {
 
 dependencies {
     compile group: 'com.udojava', name: 'EvalEx', version: '1.0'
+    compile name: 'annotations-java8'
 }
 
 test {

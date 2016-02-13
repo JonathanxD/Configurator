@@ -20,8 +20,9 @@ package github.therealbuggy.test;
 
 import java.util.Map;
 
-import github.therealbuggy.configurator.BackEndIConfigurator;
+import github.therealbuggy.configurator.AbstractBackEnd;
 import github.therealbuggy.configurator.Configurator;
+import github.therealbuggy.configurator.data.ExtraData;
 import github.therealbuggy.configurator.IConfigurator;
 import github.therealbuggy.configurator.key.Key;
 import github.therealbuggy.configurator.nav.In;
@@ -37,10 +38,10 @@ public class Test2 {
     }
 
     public static void main(String[] args) {
-        IConfigurator<Keys> configurator = new Configurator<Keys>(new BackEndIConfigurator() {
+        IConfigurator<Keys> configurator = new Configurator<Keys>(new AbstractBackEnd() {
 
             @Override
-            public boolean valueExists(String path) {
+            public boolean pathExists(String path) {
                 return false;
             }
 
@@ -75,6 +76,11 @@ public class Test2 {
 
             @Override
             public Map<String, Object> getAllOnPath(String path) {
+                return null;
+            }
+
+            @Override
+            public ExtraData extraData() {
                 return null;
             }
 

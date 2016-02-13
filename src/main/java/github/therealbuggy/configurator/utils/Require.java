@@ -16,26 +16,22 @@
  *     You should have received a copy of the GNU Affero General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package github.therealbuggy.configurator.transformer;
-
-import java.util.Collection;
-import java.util.Optional;
-
-import github.therealbuggy.configurator.IConfigurator;
-import github.therealbuggy.configurator.key.Key;
-import github.therealbuggy.configurator.utils.Reference;
+package github.therealbuggy.configurator.utils;
 
 /**
- * Created by jonathan on 10/02/16.
+ * Created by jonathan on 13/02/16.
  */
-public interface ITransformerHandler {
+public class Require {
 
-    <T> Optional<TransformedObject<T>> transform(Key<?> sectionToTransform, Reference reference);
-    void construct(Key<?> section, Reference reference);
+    public static <T> T require(java.util.Optional<T> optional, String message) {
+        if(optional == null || !optional.isPresent())
+            throw new IllegalStateException(message);
 
-    Collection<Transformer<?>> getTransformers();
+        return optional.get();
+    }
 
-    void addTransformer(Transformer<?> transformer);
+    public static <T> T require(java.util.Optional<T> optional) {
+        return require(optional, "Optional cannot be EMPTY");
+    }
 
-    void removeTransformer(Transformer<?> transformer);
 }

@@ -22,11 +22,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import github.therealbuggy.configurator.IConfigurator;
 import github.therealbuggy.configurator.key.Key;
 import github.therealbuggy.configurator.transformer.exception.TransformException;
+import github.therealbuggy.configurator.utils.Reference;
 
 /**
  * Created by jonathan on 10/02/16.
@@ -42,22 +44,22 @@ public class TransformerHandlerImpl implements ITransformerHandler {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> Optional<TransformedObject<T>> transform(Key<?> sectionToTransform) {
+    public <T> Optional<TransformedObject<T>> transform(Key<?> sectionToTransform, Reference reference) {
 
         for (Transformer<?> transformer : transformers) {
             try {
+                if(transformer.supports(reference)) {
+                    Optional<T> transform = (Optional<T>) transformer.transformSection(sectionToTransform, configurator);
+                    if (transform.isPresent()) {
 
-                Optional<T> transform = (Optional<T>) transformer.transformSection(sectionToTransform, configurator);
-                if (transform.isPresent()) {
+                        Class<? extends Transformer> transformerClass = transformer.getClass();
+                        return Optional.of(new TransformedObject<>(transform.get(), transformerClass));
 
-                    Class<? extends Transformer> transformerClass = transformer.getClass();
-                    return Optional.of(new TransformedObject<>(transform.get(), transformerClass));
-
+                    }
                 }
-            } catch (Exception ex) {
-                if(ex instanceof TransformException)
-                    ex.printStackTrace();
-            }
+            } catch (TransformException ex) {
+                ex.printStackTrace();
+            } catch (Throwable ignored){}
 
         }
 
@@ -67,20 +69,23 @@ public class TransformerHandlerImpl implements ITransformerHandler {
     // TODO: Multi Process
     @SuppressWarnings("unchecked")
     @Override
-    public void construct(Key<?> section, Object value) {
+    public void construct(Key<?> section, Reference reference) {
 
         for (Transformer transformer : transformers) {
             try {
 
-                if (!transformer.canConstruct(value))
+                Objects.requireNonNull(reference.get(), "Cannot process a null object!");
+
+                if (!transformer.canConstruct(reference.get()))
                     continue;
 
-                transformer.constructSection(section, value, configurator);
-            } catch (Exception ex) {
-                if(ex instanceof TransformException)
-                    ex.printStackTrace();
+                if(!transformer.supports(reference))
+                    continue;
 
-            }
+                transformer.constructSection(section, reference.get(), configurator);
+            } catch (TransformException ex) {
+                ex.printStackTrace();
+            } catch (Throwable ignored) {}
 
         }
     }
