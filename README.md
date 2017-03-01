@@ -1,1 +1,1 @@
-New Project: [Config](https://github.com/JonathanxD/Config)
+# New Project: [Config](https://github.com/JonathanxD/Config)
