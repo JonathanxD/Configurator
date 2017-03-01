@@ -18,16 +18,20 @@
  */
 package github.therealbuggy.configurator.types;
 
+import com.github.jonathanxd.iutils.object.GenericRepresentation;
+
 import github.therealbuggy.configurator.holder.UnknownValueHolder;
 import github.therealbuggy.configurator.translator.Translator;
 
 /**
  * Created by jonathan on 01/01/16.
  */
-public interface Type<T> {
+public interface Value<T> {
     T translate(UnknownValueHolder input);
     T flyTranslator(String expression, Translator<T> translator);
     T defaultValue();
+
+    GenericRepresentation<T> getGenericRepresentation();
 
     boolean isTranslatorSupported();
     boolean isDefaultValuePresent();
